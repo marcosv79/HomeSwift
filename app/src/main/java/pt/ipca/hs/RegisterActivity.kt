@@ -1,5 +1,6 @@
 package pt.ipca.hs
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -40,9 +41,18 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Utilizador registado com sucesso", Toast.LENGTH_SHORT).show()
+                startLoginActivity()
             } else {
                 Toast.makeText(this, "Registo não concluído", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun startLoginActivity(){
+        val email_et = findViewById<EditText>(R.id.email_et)
+        val email = email_et.text.toString()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.putExtra("email",email)
+        startActivity(intent)
     }
 }
