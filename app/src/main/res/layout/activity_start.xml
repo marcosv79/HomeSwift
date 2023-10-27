@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
     tools:context=".StartActivity">
+
+    <EditText
+        android:id="@+id/add_name_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Nome"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="200dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btn_add_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adicionar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Terminar sessão"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="300dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="600dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
