@@ -20,7 +20,7 @@ class StartActivity : AppCompatActivity() {
         btn_logout.setOnClickListener(View.OnClickListener {
             FirebaseAuth.getInstance().signOut()
             Toast.makeText(this, "Sessão terminada", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         })
 
