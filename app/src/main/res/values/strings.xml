@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HS</string>
+    <string-array name="user_types">
+        <item>Cliente</item>
+        <item>Fornecedor</item>
+    </string-array>
 </resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "124103409169",
+    "project_id": "homeswift-3efe9",
+    "storage_bucket": "homeswift-3efe9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124103409169:android:59fa921b2b423c6c817bb0",
+        "android_client_info": {
+          "package_name": "pt.ipca.hs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYNQXOkjSn0dCbaUIy2MYcFxg0hwdRNrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

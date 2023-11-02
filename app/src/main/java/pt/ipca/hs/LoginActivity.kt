@@ -8,10 +8,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -19,7 +21,10 @@ class LoginActivity : AppCompatActivity() {
         val email_et_la = findViewById<EditText>(R.id.email_et_la)
         val password_et_la = findViewById<EditText>(R.id.password_et_la)
         val btn_login_la =  findViewById<Button>(R.id.btn_login_la)
+
         auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
         val intent = intent
         val email = intent.getStringExtra("email")
 
@@ -38,11 +43,36 @@ class LoginActivity : AppCompatActivity() {
     private fun loginUser(email: String, password: String){
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful){
-                Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, StartActivity::class.java)
-                startActivity(intent)
+                val user = auth.currentUser
+                if (user != null){
+                    firestore.collection("users")
+                        .document(user.uid)
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (document != null){
+                                val userType = document.getString("userType")
+
+                                if (userType == "Cliente"){
+                                    Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, MainClientActivity::class.java)
+                                    startActivity(intent)
+                                } else if (userType == "Fornecedor"){
+                                    Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, MainProviderActivity::class.java)
+                                    startActivity(intent)
+                                } else {
+                                    Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, MainAdminActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Erro a obter informações do utilizador", Toast.LENGTH_SHORT).show()
+                        }
+                }
             } else {
-                Toast.makeText(this, "Erro a fazer login", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Credenciais inválidas", Toast.LENGTH_SHORT).show()
             }
         }
     }
