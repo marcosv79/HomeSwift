@@ -51,18 +51,22 @@ class LoginActivity : AppCompatActivity() {
                         .addOnSuccessListener { document ->
                             if (document != null){
                                 val userType = document.getString("userType")
+                                val name = document.getString("name")
 
                                 if (userType == "Cliente"){
                                     Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this, MainClientActivity::class.java)
+                                    intent.putExtra("name", name)
                                     startActivity(intent)
                                 } else if (userType == "Fornecedor"){
                                     Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this, MainProviderActivity::class.java)
+                                    intent.putExtra("name", name)
                                     startActivity(intent)
                                 } else {
                                     Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this, MainAdminActivity::class.java)
+                                    intent.putExtra("name", name)
                                     startActivity(intent)
                                 }
                             }

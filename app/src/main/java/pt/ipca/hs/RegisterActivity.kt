@@ -22,6 +22,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        val name = findViewById<EditText>(R.id.name_et)
         val email = findViewById<EditText>(R.id.email_et)
         val password = findViewById<EditText>(R.id.password_et)
         val btnRegisterRa = findViewById<Button>(R.id.btn_register_ra)
@@ -35,6 +36,7 @@ class RegisterActivity : AppCompatActivity() {
         userTypeSpinner.adapter = userTypeAdapter
 
         btnRegisterRa.setOnClickListener(View.OnClickListener {
+            val name_txt = name.text.toString()
             val email_txt = email.text.toString()
             val password_txt = password.text.toString()
             val selectedUserType = userTypeSpinner.selectedItem.toString()
@@ -44,25 +46,26 @@ class RegisterActivity : AppCompatActivity() {
             } else if (password_txt.length < 6) {
                 Toast.makeText(this, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
             } else {
-                registerUser(email_txt, password_txt, selectedUserType)
+                registerUser(name_txt, email_txt, password_txt, selectedUserType)
             }
         })
     }
 
-    private fun registerUser(email: String, password: String, userType: String) {
+    private fun registerUser(name: String, email: String, password: String, userType: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = auth.currentUser
 
                 val userDocument = firestore.collection("users").document(user?.uid.toString())
                 val userData = hashMapOf(
+                    "name" to name,
                     "email" to email,
                     "userType" to userType
                 )
                 userDocument.set(userData)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Utilizador registado com sucesso", Toast.LENGTH_SHORT).show()
-                        startLoginActivity()
+                        startLoginActivity(name, email)
                     }
                     .addOnFailureListener{
                         Toast.makeText(this, "Registo não concluído", Toast.LENGTH_SHORT).show()
@@ -73,11 +76,11 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    fun startLoginActivity(){
-        val email_et = findViewById<EditText>(R.id.email_et)
-        val email = email_et.text.toString()
+    fun startLoginActivity(name: String, email: String) {
         val intent = Intent(this, LoginActivity::class.java)
-        intent.putExtra("email",email)
+        intent.putExtra("email", email)
+        intent.putExtra("name", name)
         startActivity(intent)
     }
+
 }
