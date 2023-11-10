@@ -18,7 +18,7 @@ class MainClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(amcHomeFragment())
 
-        binding.bottomNavigationView.setOnItemSelectedListener { item: MenuItem ->
+        binding.bottomNavigationViewClient.setOnItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.home_amc -> replaceFragment(amcHomeFragment())
                 R.id.mensagens_amc -> replaceFragment(amcMensagensFragment())
@@ -38,7 +38,7 @@ class MainClientActivity : AppCompatActivity() {
         bundle.putString("name", name)
         fragment.arguments = bundle
 
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.replace(R.id.frame_layout_amc, fragment)
         fragmentTransaction.commit()
     }
 

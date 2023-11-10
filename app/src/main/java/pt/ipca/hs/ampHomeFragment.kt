@@ -14,10 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [amcHomeFragment.newInstance] factory method to
+ * Use the [ampHomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class amcHomeFragment : Fragment() {
+class ampHomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,12 +34,12 @@ class amcHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_amc_home, container, false)
-        val name_tv = rootView.findViewById<TextView>(R.id.welcome_client_tv)
+        val rootView = inflater.inflate(R.layout.fragment_amp_home, container, false)
+        val name_tv = rootView.findViewById<TextView>(R.id.welcome_provider_tv)
 
         val name = arguments?.getString("name")
 
-        if (name != null) {
+        if(name != null){
             name_tv.text = "Olá, $name"
         }
 
@@ -53,12 +53,12 @@ class amcHomeFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment amcHomeFragment.
+         * @return A new instance of fragment ampHomeFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            amcHomeFragment().apply {
+            ampHomeFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

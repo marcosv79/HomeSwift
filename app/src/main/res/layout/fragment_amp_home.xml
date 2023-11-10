@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".amcPerfilFragment">
+    tools:context=".ampHomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/welcome_provider_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Perfil Cliente"
+        android:layout_gravity="center"
+        android:text=""
         android:textSize="26dp"
-        android:layout_gravity="center"/>
+        android:layout_marginTop="-200dp"/>
 
 </FrameLayout>
