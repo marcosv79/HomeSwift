@@ -18,7 +18,7 @@ class MainProviderActivity : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(ampHomeFragment())
 
-        binding.bottomNavigationViewProvider.setOnItemSelectedListener { item ->
+        binding.bottomNavigationViewProvider.setOnItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.home_amp -> replaceFragment(ampHomeFragment())
                 R.id.mensagens_amp -> replaceFragment(ampMensagensFragment())
