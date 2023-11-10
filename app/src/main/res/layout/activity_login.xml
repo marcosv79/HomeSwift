@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Iniciar sessão"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp" />
+        android:layout_marginTop="50dp" />
 
     <EditText
         android:id="@+id/email_et_la"
@@ -21,7 +21,7 @@
         android:hint="E-mail"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="150dp"
         android:layout_centerHorizontal="true"
         />
 
@@ -32,7 +32,7 @@
         android:hint="Palavra-passe"
         android:ems="10"
         android:inputType="textPassword"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="250dp"
         android:layout_centerHorizontal="true"/>
 
     <Button
@@ -40,6 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seguinte"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="550dp"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

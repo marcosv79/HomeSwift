@@ -1,19 +1,45 @@
 package pt.ipca.hs
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import pt.ipca.hs.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import pt.ipca.hs.databinding.ActivityMainClientBinding
 
 class MainClientActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainClientBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_client)
+        binding = ActivityMainClientBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        replaceFragment(amcHomeFragment())
 
-        val name_tv = findViewById<TextView>(R.id.welcome_client_tv)
-        val name = intent.getStringExtra("name")
-
-        if(name != null){
-            name_tv.text = "Olá $name"
+        binding.bottomNavigationView.setOnItemSelectedListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.home_amc -> replaceFragment(amcHomeFragment())
+                R.id.mensagens_amc -> replaceFragment(amcMensagensFragment())
+                R.id.pedidos_amc -> replaceFragment(amcPedidosFragment())
+                R.id.perfil_amc -> replaceFragment(amcPerfilFragment())
+            }
+            true
         }
     }
+
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val name = intent.getStringExtra("name")
+        val bundle = Bundle()
+        bundle.putString("name", name)
+        fragment.arguments = bundle
+
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
+    }
+
 }
