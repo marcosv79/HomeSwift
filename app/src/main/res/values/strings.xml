@@ -1,9 +1,28 @@
 <resources>
     <string name="app_name">HS</string>
+
     <string-array name="user_types">
         <item>Cliente</item>
         <item>Fornecedor</item>
     </string-array>
+
+    <string-array name="location">
+        <item>Braga</item>
+        <item>Barcelos</item>
+        <item>Esposende</item>
+        <item>Vila Nova de Famalicão</item>
+        <item>Guimarães</item>
+        <item>Vizela</item>
+        <item>Amares</item>
+        <item>Vila Verde</item>
+        <item>Póvoa de Lanhoso</item>
+        <item>Terras de Bouro</item>
+        <item>Vieira do Minho</item>
+        <item>Cabeceiras de Basto</item>
+        <item>Fafe</item>
+        <item>Celorico de Basto</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
