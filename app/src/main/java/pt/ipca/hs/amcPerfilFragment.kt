@@ -21,6 +21,7 @@ class amcPerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var myDatabase: MyDatabase
 
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
@@ -35,6 +36,7 @@ class amcPerfilFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -50,7 +52,7 @@ class amcPerfilFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-
+        myDatabase = MyDatabase.invoke(requireContext())
         nameEditText = view.findViewById(R.id.et_name_amc_perfil)
         emailEditText = view.findViewById(R.id.et_email_amc_perfil)
         passwordEditText = view.findViewById(R.id.et_password_amc_perfil)
@@ -88,6 +90,26 @@ class amcPerfilFragment : Fragment() {
                 .update("address", address, "location", selectedLocation)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
+
+                    Thread{
+                        val userDao = myDatabase.userDao()
+
+                        val existingUser = userDao.findByEmail(emailEditText.text.toString())
+
+                        if(existingUser != null){
+                            existingUser.address = address
+                            existingUser.location = selectedLocation
+
+                            if(newPassword.isNotEmpty()){
+                                existingUser.password = newPassword
+                            }
+
+                            userDao.updateUser(existingUser)
+
+                            activity?.runOnUiThread{
+                            }
+                        }
+                    }.start()
 
                     if(newPassword.isNotEmpty()){
                         auth.currentUser?.updatePassword(newPassword)

@@ -17,10 +17,13 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var myDatabase: MyDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        myDatabase = MyDatabase.invoke(this)
 
         val name = findViewById<EditText>(R.id.name_et)
         val email = findViewById<EditText>(R.id.email_et)
@@ -47,6 +50,8 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
             } else {
                 registerUser(name_txt, email_txt, password_txt, selectedUserType)
+                val newUser = User(name = name_txt, email = email_txt, password = password_txt, userType = selectedUserType)
+                insertUser(newUser)
             }
         })
     }
@@ -83,4 +88,9 @@ class RegisterActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun insertUser(user: User){
+        Thread{
+            myDatabase.userDao().insertAll(user)
+        }.start()
+    }
 }
