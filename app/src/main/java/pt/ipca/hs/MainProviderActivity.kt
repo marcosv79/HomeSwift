@@ -1,14 +1,12 @@
 package pt.ipca.hs
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import pt.ipca.hs.databinding.ActivityMainClientBinding
 import pt.ipca.hs.databinding.ActivityMainProviderBinding
 
-class MainProviderActivity : AppCompatActivity() {
+class  MainProviderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainProviderBinding
 

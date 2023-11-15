@@ -1,12 +1,8 @@
 package pt.ipca.hs
 
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import pt.ipca.hs.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import pt.ipca.hs.databinding.ActivityMainClientBinding
 
 class MainClientActivity : AppCompatActivity() {
@@ -18,7 +14,7 @@ class MainClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(amcHomeFragment())
 
-        binding.bottomNavigationViewClient.setOnItemSelectedListener { item: MenuItem ->
+        binding.bottomNavigationViewClient.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_amc -> replaceFragment(amcHomeFragment())
                 R.id.mensagens_amc -> replaceFragment(amcMensagensFragment())
