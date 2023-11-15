@@ -1,5 +1,6 @@
 package pt.ipca.hs
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ class amcPerfilFragment : Fragment() {
     private lateinit var passwordEditText: EditText
     private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
+    private lateinit var btnLogout: Button
 
     private var param1: String? = null
     private var param2: String? = null
@@ -55,6 +57,7 @@ class amcPerfilFragment : Fragment() {
         moradaEditText = view.findViewById(R.id.et_address_amc_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amc_perfil)
         btnGuardar = view.findViewById(R.id.btn_save_amc_perfil)
+        btnLogout = view.findViewById(R.id.btn_logout_client)
 
         nameEditText.isEnabled = false
         emailEditText.isEnabled = false
@@ -63,6 +66,10 @@ class amcPerfilFragment : Fragment() {
 
         btnGuardar.setOnClickListener{
             saveNewData()
+        }
+
+        btnLogout.setOnClickListener{
+            logout()
         }
 
         return view
@@ -127,9 +134,15 @@ class amcPerfilFragment : Fragment() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    // Tratar falha na leitura do Firestore, se necessário
                 }
         }
     }
 
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        Toast.makeText(context, "Sessão terminada", Toast.LENGTH_SHORT).show()
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
+    }
 }
