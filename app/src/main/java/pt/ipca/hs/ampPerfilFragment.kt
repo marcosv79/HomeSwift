@@ -29,13 +29,14 @@ class ampPerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-
+    private lateinit var myDatabase: MyDatabase
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var moradaEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
+    private lateinit var spinnerService: Spinner
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -58,12 +59,13 @@ class ampPerfilFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-
+        myDatabase = MyDatabase.invoke(requireContext())
         nameEditText = view.findViewById(R.id.et_name_amp_perfil)
         emailEditText = view.findViewById(R.id.et_email_amp_perfil)
         passwordEditText = view.findViewById(R.id.et_password_amp_perfil)
         moradaEditText = view.findViewById(R.id.et_address_amp_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amp_perfil)
+        spinnerService = view.findViewById(R.id.spinner_service_amp_perfil)
         btnGuardar = view.findViewById(R.id.btn_save_amp_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_provider)
 
@@ -87,15 +89,37 @@ class ampPerfilFragment : Fragment() {
         val userId = auth.currentUser?.uid
         val address = moradaEditText.text.toString()
         val selectedLocation = spinnerLocation.selectedItem.toString()
+        val selectedService = spinnerService.selectedItem.toString()
         val newPassword = passwordEditText.text.toString()
 
         if(userId != null){
             val userDocument = firestore.collection("users").document(userId)
 
             userDocument
-                .update("address", address, "location", selectedLocation)
+                .update("address", address, "location", selectedLocation, "service", selectedService)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
+
+                    Thread{
+                        val userDao = myDatabase.userDao()
+
+                        val existingUser = userDao.findByEmail(emailEditText.text.toString())
+
+                        if(existingUser != null){
+                            existingUser.address = address
+                            existingUser.location = selectedLocation
+                            existingUser.service = selectedService
+
+                            if(newPassword.isNotEmpty()){
+                                existingUser.password = newPassword
+                            }
+
+                            userDao.updateUser(existingUser)
+
+                            activity?.runOnUiThread{
+                            }
+                        }
+                    }.start()
 
                     if(newPassword.isNotEmpty()){
                         auth.currentUser?.updatePassword(newPassword)
@@ -127,6 +151,7 @@ class ampPerfilFragment : Fragment() {
                         val userEmail = documentSnapshot.getString("email")
                         val userAddress = documentSnapshot.getString("address")
                         val userLocation = documentSnapshot.getString("location")
+                        val userService = documentSnapshot.getString("service")
 
                         nameEditText.setText(userName)
                         emailEditText.setText(userEmail)
@@ -138,6 +163,11 @@ class ampPerfilFragment : Fragment() {
                         if (!userLocation.isNullOrEmpty()) {
                             val position = (spinnerLocation.adapter as ArrayAdapter<String>).getPosition(userLocation)
                             spinnerLocation.setSelection(position)
+                        }
+
+                        if (!userService.isNullOrEmpty()) {
+                            val position = (spinnerService.adapter as ArrayAdapter<String>).getPosition(userService)
+                            spinnerService.setSelection(position)
                         }
                     }
                 }

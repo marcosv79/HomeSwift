@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [User::class, Service::class], version = 2)
+@Database(entities = [User::class, Service::class], version = 3)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun serviceDao(): ServiceDao
@@ -26,7 +26,7 @@ abstract class MyDatabase : RoomDatabase() {
                 context,
                 MyDatabase::class.java,
                 "homeswift.db"
-            ).addMigrations(MIGRATION_1_2)
+            ).addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build()
     }
 }
@@ -41,3 +41,8 @@ val MIGRATION_1_2: Migration = object : Migration(1, 2) {
     }
 }
 
+val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE users ADD COLUMN service TEXT NOT NULL DEFAULT ''")
+    }
+}
