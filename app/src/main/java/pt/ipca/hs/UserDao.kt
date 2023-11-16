@@ -23,6 +23,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE userType = 'Fornecedor' ")
     fun getUsersProvider(): List<User>
 
+    @Query("SELECT * FROM users WHERE service = :service")
+    fun findByService(service: String): List<User>
+
     @Insert
     fun insertAll(vararg user: User)
 

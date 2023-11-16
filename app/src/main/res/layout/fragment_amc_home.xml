@@ -20,4 +20,14 @@
         android:textSize="26dp"
         android:layout_marginTop="-180dp"/>
 
+    <AutoCompleteTextView
+        android:id="@+id/search_auto_complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="Pesquisar..."
+        android:imeOptions="actionDone"
+        android:inputType="text" />
 </FrameLayout>
