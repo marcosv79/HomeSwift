@@ -17,6 +17,12 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email")
     fun findByEmail(email: String): User?
 
+    @Query("SELECT * FROM users WHERE userType = 'Cliente' ")
+    fun getUsersClient(): List<User>
+
+    @Query("SELECT * FROM users WHERE userType = 'Fornecedor' ")
+    fun getUsersProvider(): List<User>
+
     @Insert
     fun insertAll(vararg user: User)
 
