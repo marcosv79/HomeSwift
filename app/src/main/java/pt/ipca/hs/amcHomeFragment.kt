@@ -96,7 +96,7 @@ class amcHomeFragment : Fragment() {
         }
 */
 
-
+        //TESTE
         serviceAutoComplete.setOnItemClickListener { _, _, _, _ ->
             val selectedService = serviceAutoComplete.text.toString()
             getSelectedProvider(selectedService)
