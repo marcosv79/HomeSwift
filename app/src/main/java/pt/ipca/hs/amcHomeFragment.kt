@@ -2,15 +2,16 @@ package pt.ipca.hs
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ListView
-import android.widget.Spinner
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,8 @@ class amcHomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var serviceSpinner: Spinner
+    //private lateinit var serviceSpinner: Spinner
+    private lateinit var serviceAutoComplete: AutoCompleteTextView
     private lateinit var listView: ListView
     private lateinit var usersAdapter: ArrayAdapter<String>
     private lateinit var myDatabase: MyDatabase
@@ -57,7 +59,8 @@ class amcHomeFragment : Fragment() {
             name_tv.text = "Olá, $name"
         }
 
-        serviceSpinner = rootView.findViewById(R.id.spinner_service_amc_home)
+        //serviceSpinner = rootView.findViewById(R.id.spinner_service_amc_home)
+        serviceAutoComplete = rootView.findViewById(R.id.autoCompleteTextView_service_amc_home)
         listView = rootView.findViewById(R.id.lv_service_amc_home)
         myDatabase = MyDatabase.invoke(requireContext())
 
@@ -66,15 +69,16 @@ class amcHomeFragment : Fragment() {
             R.array.service,
             android.R.layout.simple_spinner_item
         )
-        servicesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        serviceSpinner.adapter = servicesAdapter
+        //servicesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        //serviceSpinner.adapter = servicesAdapter
+        serviceAutoComplete.setAdapter(servicesAdapter)
 
         usersAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1
         )
         listView.adapter = usersAdapter
-
+/*
         serviceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -89,6 +93,30 @@ class amcHomeFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 getProviders()
             }
+        }
+*/
+
+
+        serviceAutoComplete.setOnItemClickListener { _, _, _, _ ->
+            val selectedService = serviceAutoComplete.text.toString()
+            getSelectedProvider(selectedService)
+        }
+
+        serviceAutoComplete.setOnDismissListener {
+            if (serviceAutoComplete.text.isBlank()) {
+                getProviders()
+            }
+        }
+
+        // Configura o InputType para evitar que a tecla Enter seja interpretada
+        serviceAutoComplete.inputType = InputType.TYPE_NULL
+
+        serviceAutoComplete.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                // Impede que a ação padrão seja executada
+                return@setOnEditorActionListener true
+            }
+            false
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
