@@ -14,6 +14,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id")
     fun findById(id: Int): User
 
+    @Query("SELECT * FROM users WHERE name = :name")
+    fun findByName(name: String): User?
+
     @Query("SELECT * FROM users WHERE email = :email")
     fun findByEmail(email: String): User?
 
@@ -23,8 +26,8 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE userType = 'Fornecedor' ")
     fun getUsersProvider(): List<User>
 
-    @Query("SELECT * FROM users WHERE service = :service")
-    fun findByService(service: String): List<User>
+    @Query("SELECT * FROM users WHERE userType = 'Fornecedor' AND service = :selectedService")
+    fun getUsersByService(selectedService: String): List<User>
 
     @Insert
     fun insertAll(vararg user: User)

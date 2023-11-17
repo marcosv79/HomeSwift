@@ -1,14 +1,19 @@
 package pt.ipca.hs
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.ListView
+import android.widget.Spinner
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +29,10 @@ class amcHomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var listViewServices: ListView
+
+    private lateinit var serviceSpinner: Spinner
+    private lateinit var listView: ListView
+    private lateinit var usersAdapter: ArrayAdapter<String>
     private lateinit var myDatabase: MyDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +40,16 @@ class amcHomeFragment : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_amc_home, container, false)
         val name_tv = rootView.findViewById<TextView>(R.id.welcome_client_tv)
-        val searchAutoComplete = rootView.findViewById<AutoCompleteTextView>(R.id.search_auto_complete)
-
-        myDatabase = MyDatabase.invoke(requireContext())
 
         val name = arguments?.getString("name")
 
@@ -50,64 +57,98 @@ class amcHomeFragment : Fragment() {
             name_tv.text = "Olá, $name"
         }
 
-        // Adiciona um listener para o AutoCompleteTextView
-        //setupSearchListener(searchAutoComplete)
+        serviceSpinner = rootView.findViewById(R.id.spinner_service_amc_home)
+        listView = rootView.findViewById(R.id.lv_service_amc_home)
+        myDatabase = MyDatabase.invoke(requireContext())
 
-        // Fornece sugestões ao AutoCompleteTextView
-        provideSearchSuggestions(searchAutoComplete)
+        val servicesAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.service,
+            android.R.layout.simple_spinner_item
+        )
+        servicesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        serviceSpinner.adapter = servicesAdapter
 
+        usersAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1
+        )
+        listView.adapter = usersAdapter
+
+        serviceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedService = parent?.getItemAtPosition(position).toString()
+                getSelectedProvider(selectedService)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                getProviders()
+            }
+        }
+
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val selectedProviderName = listView.getItemAtPosition(position).toString()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val userDao = MyDatabase.invoke(requireContext()).userDao()
+                val selectedProvider = userDao.findByName(selectedProviderName)
+
+                launch(Dispatchers.Main) {
+                    if (selectedProvider != null) {
+                        navigateToProviderPage(selectedProvider.id)
+                    }
+                }
+            }
+        }
         return rootView
     }
-/*
-    private fun setupSearchListener(searchAutoComplete: AutoCompleteTextView) {
-        // Substitua setOnEditorActionListener por setOnItemClickListener para lidar com a seleção de sugestões
-        searchAutoComplete.setOnItemClickListener { _, _, position, _ ->
-            val selectedQuery = searchAutoComplete.adapter.getItem(position) as String
-            performSearch(selectedQuery)
-        }
-    }
-*/
-private fun provideSearchSuggestions(searchAutoComplete: AutoCompleteTextView) {
-    // Substitua este array com seus resultados reais da pesquisa
-    val suggestions = arrayOf("Carpintaria", "Jardinagem", "Outro")
 
-    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, suggestions)
-    searchAutoComplete.setAdapter(adapter)
-}
-/*
-    private fun performSearch(query: String) {
-        // Lógica de pesquisa aqui
-        // Exemplo: exibir uma mensagem com o termo pesquisado
-        Toast.makeText(requireContext(), "Pesquisando por: $query", Toast.LENGTH_SHORT).show()
-
-        // Adiciona a chamada para a função que busca na base de dados
-        fetchServicesFromDatabase(query)
+    private fun navigateToProviderPage(providerId: Int) {
+        val intent = Intent(requireContext(), ProviderPageActivity::class.java)
+        intent.putExtra("id", providerId)
+        startActivity(intent)
     }
 
-    private fun fetchServicesFromDatabase(query: String) {
-        val userDao = myDatabase.userDao()
-        val users = userDao.findByService(query)
 
-        if (users.isNotEmpty()) {
-            // Exibir o serviço correspondente ao termo pesquisado
-            val service = users.first().service // Supondo que a sua classe User tenha uma propriedade chamada service
-            displayServices(service)
-        } else {
-            // Lidar com o caso em que nenhum serviço foi encontrado
-            Toast.makeText(requireContext(), "Nenhum serviço encontrado para: $query", Toast.LENGTH_SHORT).show()
+    private fun getSelectedProvider(selectedService: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val userDao = myDatabase.userDao()
+
+            val providersList = userDao.getUsersByService(selectedService)
+
+            launch(Dispatchers.Main) {
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    providersList.map { it.name ?: "Nome não disponível" }
+                )
+                listView.adapter = adapter
+            }
         }
     }
 
-    private fun displayServices(service: String) {
-        // Aqui você pode implementar a lógica para exibir o serviço da maneira desejada
-        // Por exemplo, pode abrir uma nova tela ou mostrar em um diálogo
-        // Neste exemplo, apenas exibimos uma mensagem com o serviço encontrado
-        val serviceMessage = "Serviço encontrado: $service"
-        Toast.makeText(requireContext(), serviceMessage, Toast.LENGTH_SHORT).show()
+
+    private fun getProviders() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val userDao = myDatabase.userDao()
+
+            val clientsList = userDao.getUsersProvider()
+
+            launch(Dispatchers.Main) {
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    clientsList.map { it.name ?: "Nome não disponível" }
+                )
+                listView.adapter = adapter
+            }
+        }
     }
-
-
-*/
 
     companion object {
         /**
