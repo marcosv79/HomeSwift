@@ -39,7 +39,7 @@
             android:layout_toStartOf="@+id/sendButton"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:hint="Escreva a Mensagem..."
+            android:hint="Escrever..."
             android:layout_centerVertical="true"
             android:layout_alignBaseline="@+id/sendButton" />
 

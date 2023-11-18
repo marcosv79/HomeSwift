@@ -29,35 +29,31 @@ class ProviderPageActivity : AppCompatActivity() {
 
         val messagesButton = findViewById<ImageButton>(R.id.messagesbutamc)
         messagesButton.setOnClickListener {
-            // Ao clicar no botão, iniciar outra atividade ou fragmento
-            // Exemplo de iniciar outra atividade:
             val intent = Intent(this, Chat_Layout::class.java)
             startActivity(intent)
-
-            // Ou exemplo de iniciar um fragmento:
-            // val fragment = NovoFragmento()
-            // supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
         }
     }
 
     private fun updateUI(selectedProvider: User?) {
         val providerImageView = findViewById<ImageView>(R.id.providerImageView)
         val providerNameTextView = findViewById<TextView>(R.id.providerNameTextView)
-        val providerAddressTextView = findViewById<TextView>(R.id.providerAddressTextView)
+        val providerLocationTextView = findViewById<TextView>(R.id.providerLocationTextView)
+        val providerServiceTextView = findViewById<TextView>(R.id.providerServiceTextView)
 
         if (selectedProvider != null) {
             val providerName = selectedProvider.name
-            val providerAddress = selectedProvider.address
+            val providerAddress = selectedProvider.location
+            val providerService = selectedProvider.service
 
-            // Substitua ic_default_provider_icon pelo recurso real da imagem
             providerImageView.setImageResource(R.drawable.baseline_person_24)
             providerNameTextView.text = providerName
-            providerAddressTextView.text = providerAddress
+            providerLocationTextView.text = providerAddress
+            providerServiceTextView.text = providerService
         } else {
-            // Se o fornecedor não for encontrado, você pode exibir uma mensagem apropriada
             providerImageView.setImageResource(R.drawable.baseline_person_24)
             providerNameTextView.text = "Fornecedor não encontrado"
-            providerAddressTextView.text = ""
+            providerLocationTextView.text = ""
+            providerServiceTextView.text = ""
         }
     }
 }
