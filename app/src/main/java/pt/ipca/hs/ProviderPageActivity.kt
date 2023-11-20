@@ -12,6 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProviderPageActivity : AppCompatActivity() {
+
+    private var selectedProvider: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_provider_page)
@@ -21,7 +24,7 @@ class ProviderPageActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
 
-            val selectedProvider = userDao.findById(providerId)
+            selectedProvider = userDao.findById(providerId)
 
             launch(Dispatchers.Main) {
                 updateUI(selectedProvider)
@@ -37,6 +40,10 @@ class ProviderPageActivity : AppCompatActivity() {
         val btnPlaceOrder = findViewById<Button>(R.id.btnCreateOrder)
         btnPlaceOrder.setOnClickListener{
             val intent = Intent(this, PlaceOrderActivity::class.java)
+
+            intent.putExtra("name", selectedProvider?.name)
+            intent.putExtra("service", selectedProvider?.service)
+            intent.putExtra("cost", selectedProvider?.cost)
             startActivity(intent)
         }
     }

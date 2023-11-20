@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
         val password_et_la = findViewById<EditText>(R.id.password_et_la)
         val btn_login_la =  findViewById<Button>(R.id.btn_login_la)
 
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        //auth = FirebaseAuth.getInstance()
+        //firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(applicationContext)
         userDao = myDatabase.userDao()
 
@@ -59,13 +59,13 @@ class LoginActivity : AppCompatActivity() {
                     when(userType){
                         "Cliente" -> {
                             if (name != null) {
-                                startAmcPerfilFragment(email, name)
+                                startMainClientActivity(email, name)
                             }
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                         }
                         "Fornecedor" -> {
                             if (name != null) {
-                                startAmpPerfilFragment(email, name)
+                                startMainProviderActivity(email, name)
                             }
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                         }
@@ -83,14 +83,14 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-    fun startAmcPerfilFragment(email: String, name: String) {
+    fun startMainClientActivity(email: String, name: String) {
         val intent = Intent(this, MainClientActivity::class.java)
         intent.putExtra("email", email)
         intent.putExtra("name", name)
         startActivity(intent)
     }
 
-    fun startAmpPerfilFragment(email: String, name: String) {
+    fun startMainProviderActivity(email: String, name: String) {
         val intent = Intent(this, MainProviderActivity::class.java)
         intent.putExtra("email", email)
         intent.putExtra("name", name)

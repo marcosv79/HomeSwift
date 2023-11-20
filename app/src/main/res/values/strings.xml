@@ -6,6 +6,11 @@
         <item>Fornecedor</item>
     </string-array>
 
+    <string-array name="typeService">
+        <item>Normal</item>
+        <item>Urgente</item>
+    </string-array>
+
     <string-array name="location">
         <item>Braga</item>
         <item>Barcelos</item>
