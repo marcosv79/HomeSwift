@@ -1,6 +1,7 @@
 package pt.ipca.hs
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -88,43 +89,55 @@ class ampPerfilFragment : Fragment() {
     }
 
     private fun saveNewData(){
-        val userId = auth.currentUser?.uid
+        Thread{
+            val userDao = myDatabase.userDao()
+
+            val existingUser = userDao.findByEmail(emailEditText.text.toString())
+
+            if(existingUser != null){
+                val address = moradaEditText.text.toString()
+                val selectedLocation = spinnerLocation.selectedItem.toString()
+                val selectedService = spinnerService.selectedItem.toString()
+                val cost = costEditText.text.toString()
+                val newPassword = passwordEditText.text.toString()
+
+                existingUser.address = address
+                existingUser.location = selectedLocation
+                existingUser.service = selectedService
+                existingUser.cost = cost
+
+                if(newPassword.isNotEmpty()){
+                    existingUser.password = newPassword
+                }
+
+                userDao.updateUser(existingUser)
+
+                activity?.runOnUiThread{
+                    Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
+                    updateFirestore(existingUser.email)
+                }
+            }
+        }.start()
+    }
+
+    private fun updateFirestore(email: String){
         val address = moradaEditText.text.toString()
         val selectedLocation = spinnerLocation.selectedItem.toString()
         val selectedService = spinnerService.selectedItem.toString()
         val cost = costEditText.text.toString()
         val newPassword = passwordEditText.text.toString()
 
-        if(userId != null){
-            val userDocument = firestore.collection("users").document(userId)
+        val userCollection = firestore.collection("users")
+        val query = userCollection.whereEqualTo("email", email)
 
-            userDocument
-                .update("address", address, "location", selectedLocation, "service", selectedService, "cost", cost)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
-
-                    Thread{
-                        val userDao = myDatabase.userDao()
-
-                        val existingUser = userDao.findByEmail(emailEditText.text.toString())
-
-                        if(existingUser != null){
-                            existingUser.address = address
-                            existingUser.location = selectedLocation
-                            existingUser.service = selectedService
-                            existingUser.cost = cost
-
-                            if(newPassword.isNotEmpty()){
-                                existingUser.password = newPassword
-                            }
-
-                            userDao.updateUser(existingUser)
-
-                            activity?.runOnUiThread{
-                            }
-                        }
-                    }.start()
-
+        query.get().addOnSuccessListener { documents ->
+            for(document in documents){
+                document.reference.update(
+                    "address", address,
+                    "location", selectedLocation,
+                    "service", selectedService,
+                    "cost", cost
+                ).addOnSuccessListener {
                     if(newPassword.isNotEmpty()){
                         auth.currentUser?.updatePassword(newPassword)
                             ?.addOnCompleteListener{ task ->
@@ -136,53 +149,57 @@ class ampPerfilFragment : Fragment() {
                             }
                     }
                 }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(context, "Erro a atualizar informações", Toast.LENGTH_SHORT).show()
-                }
+            }
         }
     }
 
     private fun loadProviderData() {
-        val userId = auth.currentUser?.uid
+        val userEmail = getEmailFromArguments()
 
-        if (userId != null) {
-            val userDocument = firestore.collection("users").document(userId)
+        if (!userEmail.isNullOrEmpty()) {
 
-            userDocument.get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()) {
-                        val userName = documentSnapshot.getString("name")
-                        val userEmail = documentSnapshot.getString("email")
-                        val userAddress = documentSnapshot.getString("address")
-                        val userLocation = documentSnapshot.getString("location")
-                        val userService = documentSnapshot.getString("service")
-                        val userCost = documentSnapshot.getString("cost")
+            AsyncTask.execute{
+                val userDao = myDatabase.userDao()
+                val user = userDao.findByEmail(userEmail)
+
+                activity?.runOnUiThread{
+                    user?.let{
+                        val userName = it.name
+                        val userAddress = it.address
+                        val userLocation = it.location
+                        val userService = it.service
+                        val userCost = it.cost
 
                         nameEditText.setText(userName)
                         emailEditText.setText(userEmail)
 
-                        if (!userAddress.isNullOrEmpty()) {
+                        if(!userAddress.isNullOrEmpty()){
                             moradaEditText.setText(userAddress)
                         }
 
-                        if (!userLocation.isNullOrEmpty()) {
-                            val position = (spinnerLocation.adapter as ArrayAdapter<String>).getPosition(userLocation)
+                        if(!userLocation.isNullOrEmpty()){
+                            val adapter = spinnerLocation.adapter as ArrayAdapter<String>
+                            val position = adapter.getPosition(userLocation)
                             spinnerLocation.setSelection(position)
                         }
 
-                        if (!userService.isNullOrEmpty()) {
-                            val position = (spinnerService.adapter as ArrayAdapter<String>).getPosition(userService)
+                        if(!userService.isNullOrEmpty()){
+                            val adapter = spinnerService.adapter as ArrayAdapter<String>
+                            val position = adapter.getPosition(userService)
                             spinnerService.setSelection(position)
                         }
 
-                        if (!userCost.isNullOrEmpty()) {
+                        if(!userCost.isNullOrEmpty()){
                             costEditText.setText(userCost)
                         }
                     }
                 }
-                .addOnFailureListener { exception ->
-                }
+            }
         }
+    }
+
+    private fun getEmailFromArguments(): String? {
+        return arguments?.getString("email")
     }
 
     private fun logout() {

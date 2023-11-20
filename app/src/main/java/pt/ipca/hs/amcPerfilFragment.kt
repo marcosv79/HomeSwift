@@ -1,7 +1,9 @@
 package pt.ipca.hs
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,40 +79,48 @@ class amcPerfilFragment : Fragment() {
         return view
     }
 
-    private fun saveNewData(){
-        val userId = auth.currentUser?.uid
+    private fun saveNewData() {
+        Thread {
+            val userDao = myDatabase.userDao()
+
+            val existingUser = userDao.findByEmail(emailEditText.text.toString())
+
+            if (existingUser != null) {
+                val address = moradaEditText.text.toString()
+                val selectedLocation = spinnerLocation.selectedItem.toString()
+                val newPassword = passwordEditText.text.toString()
+
+                existingUser.address = address
+                existingUser.location = selectedLocation
+
+                if (newPassword.isNotEmpty()) {
+                    existingUser.password = newPassword
+                }
+
+                userDao.updateUser(existingUser)
+
+                activity?.runOnUiThread {
+                    Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
+                    updateFirestore(existingUser.email)
+                }
+            }
+        }.start()
+    }
+
+    private fun updateFirestore(email: String) {
         val address = moradaEditText.text.toString()
         val selectedLocation = spinnerLocation.selectedItem.toString()
         val newPassword = passwordEditText.text.toString()
 
-        if(userId != null){
-            val userDocument = firestore.collection("users").document(userId)
+        val userCollection = firestore.collection("users")
+        val query = userCollection.whereEqualTo("email", email)
 
-            userDocument
-                .update("address", address, "location", selectedLocation)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
-
-                    Thread{
-                        val userDao = myDatabase.userDao()
-
-                        val existingUser = userDao.findByEmail(emailEditText.text.toString())
-
-                        if(existingUser != null){
-                            existingUser.address = address
-                            existingUser.location = selectedLocation
-
-                            if(newPassword.isNotEmpty()){
-                                existingUser.password = newPassword
-                            }
-
-                            userDao.updateUser(existingUser)
-
-                            activity?.runOnUiThread{
-                            }
-                        }
-                    }.start()
-
+        query.get().addOnSuccessListener { documents ->
+            for (document in documents) {
+                document.reference.update(
+                    "address", address,
+                    "location", selectedLocation
+                ).addOnSuccessListener {
                     if(newPassword.isNotEmpty()){
                         auth.currentUser?.updatePassword(newPassword)
                             ?.addOnCompleteListener{ task ->
@@ -122,25 +132,23 @@ class amcPerfilFragment : Fragment() {
                             }
                     }
                 }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(context, "Erro a atualizar informações", Toast.LENGTH_SHORT).show()
-                }
+            }
         }
     }
 
     private fun loadUserData() {
-        val userId = auth.currentUser?.uid
+        val userEmail = getEmailFromArguments()
 
-        if (userId != null) {
-            val userDocument = firestore.collection("users").document(userId)
+        if (!userEmail.isNullOrEmpty()) {
+            AsyncTask.execute {
+                val userDao = myDatabase.userDao()
+                val user = userDao.findByEmail(userEmail)
 
-            userDocument.get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()) {
-                        val userName = documentSnapshot.getString("name")
-                        val userEmail = documentSnapshot.getString("email")
-                        val userAddress = documentSnapshot.getString("address")
-                        val userLocation = documentSnapshot.getString("location")
+                activity?.runOnUiThread {
+                    user?.let {
+                        val userName = it.name
+                        val userAddress = it.address
+                        val userLocation = it.location
 
                         nameEditText.setText(userName)
                         emailEditText.setText(userEmail)
@@ -150,14 +158,18 @@ class amcPerfilFragment : Fragment() {
                         }
 
                         if (!userLocation.isNullOrEmpty()) {
-                            val position = (spinnerLocation.adapter as ArrayAdapter<String>).getPosition(userLocation)
+                            val adapter = spinnerLocation.adapter as ArrayAdapter<String>
+                            val position = adapter.getPosition(userLocation)
                             spinnerLocation.setSelection(position)
                         }
                     }
                 }
-                .addOnFailureListener { exception ->
-                }
+            }
         }
+    }
+
+    private fun getEmailFromArguments(): String? {
+        return arguments?.getString("email")
     }
 
     private fun logout() {

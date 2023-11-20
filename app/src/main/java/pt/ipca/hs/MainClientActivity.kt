@@ -1,6 +1,7 @@
 package pt.ipca.hs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import pt.ipca.hs.databinding.ActivityMainClientBinding
@@ -30,13 +31,15 @@ class MainClientActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         val name = intent.getStringExtra("name")
+        val email = intent.getStringExtra("email")
         val bundle = Bundle()
         bundle.putString("name", name)
+        bundle.putString("email", email)
+
         fragment.arguments = bundle
 
         fragmentTransaction.replace(R.id.frame_layout_amc, fragment)
         fragmentTransaction.commit()
     }
-
 }
 
