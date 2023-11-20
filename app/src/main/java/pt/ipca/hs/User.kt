@@ -13,5 +13,6 @@ data class User(
     @ColumnInfo(name = "userType") val userType: String,
     @ColumnInfo(name = "address") var address: String = "",
     @ColumnInfo(name = "location") var location: String = "",
-    @ColumnInfo(name = "service") var service: String = ""
+    @ColumnInfo(name = "service") var service: String = "",
+    @ColumnInfo(name = "cost") var cost: String = ""
     )

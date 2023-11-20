@@ -88,9 +88,14 @@ class RegisterActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun insertUser(user: User){
-        Thread{
-            myDatabase.userDao().insertAll(user)
+    private fun insertUser(user: User) {
+        Thread {
+            val userDao = myDatabase.userDao()
+            val existingUser = userDao.findByEmail(user.email)
+            if (existingUser == null) {
+                userDao.insertAll(user)
+            }
         }.start()
     }
+
 }

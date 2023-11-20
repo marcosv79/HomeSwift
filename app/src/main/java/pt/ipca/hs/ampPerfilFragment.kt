@@ -37,6 +37,7 @@ class ampPerfilFragment : Fragment() {
     private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
     private lateinit var spinnerService: Spinner
+    private lateinit var costEditText: EditText
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -66,6 +67,7 @@ class ampPerfilFragment : Fragment() {
         moradaEditText = view.findViewById(R.id.et_address_amp_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amp_perfil)
         spinnerService = view.findViewById(R.id.spinner_service_amp_perfil)
+        costEditText = view.findViewById(R.id.et_cost_amp_perfil)
         btnGuardar = view.findViewById(R.id.btn_save_amp_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_provider)
 
@@ -90,13 +92,14 @@ class ampPerfilFragment : Fragment() {
         val address = moradaEditText.text.toString()
         val selectedLocation = spinnerLocation.selectedItem.toString()
         val selectedService = spinnerService.selectedItem.toString()
+        val cost = costEditText.text.toString()
         val newPassword = passwordEditText.text.toString()
 
         if(userId != null){
             val userDocument = firestore.collection("users").document(userId)
 
             userDocument
-                .update("address", address, "location", selectedLocation, "service", selectedService)
+                .update("address", address, "location", selectedLocation, "service", selectedService, "cost", cost)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Informações atualizadas com sucesso", Toast.LENGTH_SHORT).show()
 
@@ -109,6 +112,7 @@ class ampPerfilFragment : Fragment() {
                             existingUser.address = address
                             existingUser.location = selectedLocation
                             existingUser.service = selectedService
+                            existingUser.cost = cost
 
                             if(newPassword.isNotEmpty()){
                                 existingUser.password = newPassword
@@ -152,6 +156,7 @@ class ampPerfilFragment : Fragment() {
                         val userAddress = documentSnapshot.getString("address")
                         val userLocation = documentSnapshot.getString("location")
                         val userService = documentSnapshot.getString("service")
+                        val userCost = documentSnapshot.getString("cost")
 
                         nameEditText.setText(userName)
                         emailEditText.setText(userEmail)
@@ -168,6 +173,10 @@ class ampPerfilFragment : Fragment() {
                         if (!userService.isNullOrEmpty()) {
                             val position = (spinnerService.adapter as ArrayAdapter<String>).getPosition(userService)
                             spinnerService.setSelection(position)
+                        }
+
+                        if (!userCost.isNullOrEmpty()) {
+                            costEditText.setText(userCost)
                         }
                     }
                 }

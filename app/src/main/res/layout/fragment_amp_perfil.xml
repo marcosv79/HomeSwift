@@ -77,15 +77,25 @@
         android:entries="@array/location"
         android:background="@drawable/rounded_et_bck"/>
 
-        <Spinner
-            android:id="@+id/spinner_service_amp_perfil"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="470dp"
-            android:paddingLeft="10dp"
-            android:layout_gravity="center_horizontal"
-            android:entries="@array/service"
-            android:background="@drawable/rounded_et_bck"/>
+    <Spinner
+        android:id="@+id/spinner_service_amp_perfil"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="470dp"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="56dp"
+        android:entries="@array/service"
+        android:background="@drawable/rounded_et_bck"/>
+
+    <EditText
+        android:id="@+id/et_cost_amp_perfil"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="470dp"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="265dp"
+        android:inputType="number"
+        android:background="@drawable/rounded_et_bck"/>
 
     <Button
         android:id="@+id/btn_save_amp_perfil"

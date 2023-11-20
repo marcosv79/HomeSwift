@@ -26,7 +26,19 @@
     <string-array name="service">
         <item>Jardinagem</item>
         <item>Pixelaria</item>
+        <item>Limpeza</item>
         <item>Carpintaria</item>
+        <item>Climatização</item>
+        <item>Eletricidade</item>
+        <item>Decoração</item>
+        <item>Organização</item>
+        <item>Encanamento</item>
+        <item>Informática</item>
+        <item>Pintura</item>
+        <item>Montagem de móveis</item>
+        <item>Serralharia</item>
+        <item>Iluminação</item>
+        <item>Segurança</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
