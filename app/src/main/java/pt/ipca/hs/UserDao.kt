@@ -28,7 +28,7 @@ interface UserDao {
     fun getUsersClient(): List<User>
 
     @Query("SELECT * FROM users WHERE id = :id")
-    suspend fun getUserById(id: Int): User?
+    suspend fun getUserById(id: kotlin.Int): User?
 
     @Query("SELECT * FROM users WHERE userType = 'Fornecedor' ")
     fun getUsersProvider(): List<User>

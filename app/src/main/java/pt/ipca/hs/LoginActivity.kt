@@ -78,12 +78,12 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
                     }
-            } else {
-                Toast.makeText(this@LoginActivity, "Credenciais inválidas", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Credenciais inválidas", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
-}
 
     fun startMainClientActivity(id: Int, email: String, name: String) {
         val intent = Intent(this, MainClientActivity::class.java)

@@ -16,6 +16,12 @@ interface MessageDao {
 
     @Query("SELECT * FROM messages")
     fun getAllMessages(): List<Message>
+    @Query("SELECT * FROM users WHERE name = :username LIMIT 1")
+    fun getLoggedInUserByUsername(username: String): User?
+
+    @Query("SELECT * FROM messages WHERE receiver_id = :receiverId")
+    suspend fun getMessagesByReceiverId(receiverId: Int): List<Message>
+
 
     @Query("SELECT * FROM messages WHERE id = :id")
     fun findMessageById(id: Long): Message

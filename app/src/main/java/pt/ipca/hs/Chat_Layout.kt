@@ -24,6 +24,7 @@ class Chat_Layout : AppCompatActivity() {
 
     private var userId: Int = 0
     private var providerId: Int = 0
+    private var providerName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +32,19 @@ class Chat_Layout : AppCompatActivity() {
 
 
         // Recupera o ID do fornecedor e o nome da Intent
-        providerId = intent.getIntExtra("providerId", 0)
-        userId = intent.getIntExtra("userId", 0)
+        // Recuperar valores do Intent
+        providerId = intent.getIntExtra("id", 0)
+        userId = intent.getIntExtra("idC", 0)
+        providerName = intent.getStringExtra("providerName")
+
+        // Agora você pode usar os valores conforme necessário
+        Log.d("Chat_Layout", "Provider ID: $providerId, User ID: $userId, Provider Name: $providerName")
 
         // Initialize the database instance
         myDatabase = MyDatabase(this)
         // Initialize the MessageDao
         messageDao = myDatabase.messageDao()
 
-        Log.d("Chat_Layout", "userId recebido: $userId")
-        Log.d("Chat_Layout", "Provider recebido: $providerId")
 
         val providerName = intent.getStringExtra("providerName") ?: "Nome do Fornecedor"
         // Inicializa as Views
@@ -104,8 +108,6 @@ class Chat_Layout : AppCompatActivity() {
                 // Limpa o texto atual da ScrollView
                 messageTextView.text = ""
 
-                Log.d("Chat_Layout", "Receiver recebido: $currentProviderId")
-                Log.d("Chat_Layout", "Sender recebido: $currentUserId")
 
                 // Adiciona as mensagens recuperadas à ScrollView
                 for (message in messages) {

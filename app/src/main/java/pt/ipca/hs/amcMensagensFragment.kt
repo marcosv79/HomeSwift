@@ -29,22 +29,26 @@ class amcMensagensFragment : Fragment() {
         listViewMessages = rootView.findViewById(R.id.listViewContacts)
         myDatabase = MyDatabase.invoke(requireContext())
 
-        // Configurar o OnItemClickListener para a ListView
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
+                val providerId = selectedMessage.receiverId.toInt()
+                val userId = selectedMessage.senderId.toInt()
 
                 lifecycleScope.launch(Dispatchers.Main) {
                     val providerName = getUserName(selectedMessage.receiverId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
-                    intent.putExtra("providerId", selectedMessage.receiverId.toInt())
-                    intent.putExtra("userId", selectedMessage.senderId.toInt())
+
+                    intent.putExtra("id", providerId)
+                    intent.putExtra("idC", userId)
                     intent.putExtra("providerName", providerName)
+
+                    Log.d("Chat_Layout", "Provider ID: $providerId, User ID: $userId, Provider Name: $providerName")
+
                     startActivity(intent)
                 }
             }
         }
-
         getMessages()
 
         return rootView
@@ -89,7 +93,6 @@ class amcMensagensFragment : Fragment() {
             val userDao = myDatabase.userDao()
 
             try {
-                // Supondo que seu método de busca seja getUserById
                 val user = userDao.getUserById(userId)
 
                 if (user != null) {

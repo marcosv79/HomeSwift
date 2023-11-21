@@ -22,6 +22,7 @@ class ProviderPageActivity : AppCompatActivity() {
 
         val userId = intent.getIntExtra("idC", 0)
         val providerId = intent.getIntExtra("id", 0)
+        Log.d("ProviderPageActivity", "Provider ID: $providerId, User ID: $userId")
 
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
@@ -36,6 +37,8 @@ class ProviderPageActivity : AppCompatActivity() {
         val messagesButton = findViewById<ImageButton>(R.id.messagesbutamc)
         messagesButton.setOnClickListener {
             val intent = Intent(this, Chat_Layout::class.java)
+            intent.putExtra("id", providerId)
+            intent.putExtra("idC", userId)
             startActivity(intent)
         }
 

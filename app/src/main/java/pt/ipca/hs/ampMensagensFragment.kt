@@ -29,22 +29,27 @@ class ampMensagensFragment : Fragment() {
         listViewMessages = rootView.findViewById(R.id.listViewContacts)
         myDatabase = MyDatabase.invoke(requireContext())
 
-        // Configurar o OnItemClickListener para a ListView
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
+                val providerId = selectedMessage.receiverId.toInt()
+                val userId = selectedMessage.senderId.toInt()
+                Log.d("ampMensagens", "Provider ID: $providerId, User ID: $userId")
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val providerName = getUserName(selectedMessage.senderId.toInt())
+                    val providerName = getUserName(selectedMessage.receiverId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
-                    intent.putExtra("providerId", selectedMessage.senderId.toInt())
-                    intent.putExtra("userId", selectedMessage.receiverId.toInt())
+
+                    intent.putExtra("id", providerId)
+                    intent.putExtra("idC", userId)
                     intent.putExtra("providerName", providerName)
+
+                    Log.d("ampMensagens", "Provider ID: $providerId, User ID: $userId, Provider Name: $providerName")
+
                     startActivity(intent)
                 }
             }
         }
-
         getMessages()
 
         return rootView
@@ -71,11 +76,11 @@ class ampMensagensFragment : Fragment() {
 
         // Agrupa mensagens por usuário
         val messagesByUser =
-            messagesList.groupBy { it.senderId } // Alterado para usar o receiverId
+            messagesList.groupBy { it.receiverId } // Alterado para usar o receiverId
 
         // Adiciona apenas a última mensagem de cada usuário ao adaptador
         for ((userId, userMessages) in messagesByUser) {
-            val userName = userMessages.firstOrNull()?.let { getUserName(it.senderId.toInt()) }
+            val userName = userMessages.firstOrNull()?.let { getUserName(it.receiverId.toInt()) }
                 ?: "Nome não disponível"
             val lastMessage = userMessages.lastOrNull()?.message ?: "Sem mensagens"
             adapter.add("$userName\n$lastMessage")
@@ -89,7 +94,6 @@ class ampMensagensFragment : Fragment() {
             val userDao = myDatabase.userDao()
 
             try {
-                // Supondo que seu método de busca seja getUserById
                 val user = userDao.getUserById(userId)
 
                 if (user != null) {

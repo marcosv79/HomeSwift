@@ -126,7 +126,6 @@ class amcHomeFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val userDao = MyDatabase.invoke(requireContext()).userDao()
                 val selectedProvider = userDao.findByName(selectedProviderName)
-
                 launch(Dispatchers.Main) {
                     if (selectedProvider != null) {
                         navigateToProviderPage(selectedProvider.id)
