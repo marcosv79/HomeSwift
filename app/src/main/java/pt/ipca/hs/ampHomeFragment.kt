@@ -43,7 +43,6 @@ class ampHomeFragment : Fragment() {
             name_tv.text = "Olá, $name"
         }
 
-
         return rootView
     }
 

@@ -20,10 +20,9 @@ class ProviderPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_provider_page)
 
+        val userId = intent.getIntExtra("idC", 0)
         val providerId = intent.getIntExtra("id", 0)
-        val userId = intent.getIntExtra("userId", 0)
-        Log.d("ProviderPageActivity", "Provider recebido: $providerId")
-        Log.d("ProviderPageActivity", "User recebido: $userId")
+
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
 
@@ -37,18 +36,17 @@ class ProviderPageActivity : AppCompatActivity() {
         val messagesButton = findViewById<ImageButton>(R.id.messagesbutamc)
         messagesButton.setOnClickListener {
             val intent = Intent(this, Chat_Layout::class.java)
-            intent.putExtra("providerId", providerId)
-            intent.putExtra("userId", userId) // Pass the userId to Chat_Layout
             startActivity(intent)
         }
 
         val btnPlaceOrder = findViewById<Button>(R.id.btnCreateOrder)
         btnPlaceOrder.setOnClickListener{
             val intent = Intent(this, PlaceOrderActivity::class.java)
-
             intent.putExtra("name", selectedProvider?.name)
             intent.putExtra("service", selectedProvider?.service)
             intent.putExtra("cost", selectedProvider?.cost)
+            intent.putExtra("idProvider", selectedProvider?.id ?: 0)
+            intent.putExtra("id", userId)
             startActivity(intent)
         }
     }

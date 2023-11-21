@@ -3,6 +3,7 @@ package pt.ipca.hs
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -128,8 +129,7 @@ class amcHomeFragment : Fragment() {
 
                 launch(Dispatchers.Main) {
                     if (selectedProvider != null) {
-                        val userId = arguments?.getInt("userId", 0) ?: 0
-                        navigateToProviderPage(selectedProvider.id, userId)
+                        navigateToProviderPage(selectedProvider.id)
                     }
                 }
             }
@@ -137,10 +137,11 @@ class amcHomeFragment : Fragment() {
         return rootView
     }
 
-    private fun navigateToProviderPage(providerId: Int, userId: Int) {
+    private fun navigateToProviderPage(providerId: Int) {
+        val idClient = arguments?.getInt("idC", 0)
         val intent = Intent(requireContext(), ProviderPageActivity::class.java)
         intent.putExtra("id", providerId)
-        intent.putExtra("userId", userId)
+        intent.putExtra("idC", idClient)
         startActivity(intent)
     }
 
@@ -180,23 +181,13 @@ class amcHomeFragment : Fragment() {
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment amcHomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            amcHomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        companion object {
+            @JvmStatic
+            fun newInstance(idClient: Int) =
+                amcHomeFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt("idC", idClient)
+                    }
                 }
-            }
-    }
+        }
 }

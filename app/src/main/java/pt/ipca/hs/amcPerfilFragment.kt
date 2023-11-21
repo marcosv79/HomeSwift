@@ -90,11 +90,31 @@ class amcPerfilFragment : Fragment() {
                 val selectedLocation = spinnerLocation.selectedItem.toString()
                 val newPassword = passwordEditText.text.toString()
 
-                existingUser.address = address
-                existingUser.location = selectedLocation
+                if (address.isNotEmpty()) {
+                    existingUser.address = address
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha a morada", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
 
-                if (newPassword.isNotEmpty()) {
+                if (selectedLocation.isNotEmpty()) {
+                    existingUser.location = selectedLocation
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha a localidade", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
+
+                if (newPassword.isNotEmpty() && newPassword.length >= 6) {
                     existingUser.password = newPassword
+                } else if (newPassword.isNotEmpty()) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
                 }
 
                 userDao.updateUser(existingUser)

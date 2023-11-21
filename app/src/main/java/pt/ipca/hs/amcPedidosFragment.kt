@@ -1,22 +1,31 @@
 package pt.ipca.hs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [amcPedidosFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class amcPedidosFragment : Fragment() {
+    private lateinit var myDatabase: MyDatabase
+    private lateinit var rootView: View
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,8 +42,36 @@ class amcPedidosFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_amc_pedidos, container, false)
+        val idClient = arguments?.getInt("idC", 0)
+        myDatabase = MyDatabase.invoke(requireContext())
+        rootView = inflater.inflate(R.layout.fragment_amc_pedidos, container, false)
+
+        idClient?.let { clientId ->
+            loadOrdersForClient(clientId)
+        }
+
+        return rootView
+    }
+
+    private fun loadOrdersForClient(clientId: Int) {
+        rootView?.let { root ->
+            lifecycleScope.launch(Dispatchers.IO) {
+                val orderDao = myDatabase.orderDao()
+                val orders = orderDao.getOrdersByClientId(clientId)
+                val userDao = myDatabase.userDao()
+                val users = userDao.getAll()
+
+                launch(Dispatchers.Main) {
+                    updateUIWithOrders(orders, users)
+                }
+            }
+        }
+    }
+
+    private fun updateUIWithOrders(orders: List<Order>, users: List<User>) {
+        val recyclerView = rootView?.findViewById<RecyclerView>(R.id.recyclerViewPedidos)
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView?.adapter = OrderAdapter(orders, users)
     }
 
     companion object {

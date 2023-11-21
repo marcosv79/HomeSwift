@@ -3,6 +3,7 @@ package pt.ipca.hs
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -55,17 +56,18 @@ class LoginActivity : AppCompatActivity() {
                 if(user != null){
                     val userType = user.userType
                     val name = user.name
+                    val id = user.id
 
                     when(userType){
                         "Cliente" -> {
                             if (name != null) {
-                                startMainClientActivity(email, name)
+                                startMainClientActivity(id, email, name)
                             }
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                         }
                         "Fornecedor" -> {
                             if (name != null) {
-                                startMainProviderActivity(email, name)
+                                startMainProviderActivity(id, email, name)
                             }
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                         }
@@ -83,15 +85,17 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-    fun startMainClientActivity(email: String, name: String) {
+    fun startMainClientActivity(id: Int, email: String, name: String) {
         val intent = Intent(this, MainClientActivity::class.java)
+        intent.putExtra("idC", id)
         intent.putExtra("email", email)
         intent.putExtra("name", name)
         startActivity(intent)
     }
 
-    fun startMainProviderActivity(email: String, name: String) {
+    fun startMainProviderActivity(id: Int, email: String, name: String) {
         val intent = Intent(this, MainProviderActivity::class.java)
+        intent.putExtra("id", id)
         intent.putExtra("email", email)
         intent.putExtra("name", name)
         startActivity(intent)

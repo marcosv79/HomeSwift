@@ -101,13 +101,49 @@ class ampPerfilFragment : Fragment() {
                 val cost = costEditText.text.toString()
                 val newPassword = passwordEditText.text.toString()
 
-                existingUser.address = address
-                existingUser.location = selectedLocation
-                existingUser.service = selectedService
-                existingUser.cost = cost
+                if (address.isNotEmpty()) {
+                    existingUser.address = address
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha a morada", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
 
-                if(newPassword.isNotEmpty()){
+                if (selectedLocation.isNotEmpty()) {
+                    existingUser.location = selectedLocation
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha a localidade", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
+
+                if (selectedService.isNotEmpty()) {
+                    existingUser.service = selectedService
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha o serviço", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
+
+                if (cost.isNotEmpty()) {
+                    existingUser.cost = cost
+                } else {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Preencha o custo", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
+                }
+
+                if (newPassword.isNotEmpty() && newPassword.length >= 6) {
                     existingUser.password = newPassword
+                } else if (newPassword.isNotEmpty()) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
+                    }
+                    return@Thread
                 }
 
                 userDao.updateUser(existingUser)

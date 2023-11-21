@@ -13,6 +13,16 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/hs"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fazer pedido"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunibold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp" />
+
     <EditText
         android:id="@+id/et_providerName_placeOrder"
         android:layout_width="300dp"
@@ -31,7 +41,7 @@
         android:paddingLeft="15dp"
         android:ems="10"
         android:inputType="text"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="200dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_et_bck"/>
 
@@ -42,7 +52,7 @@
         android:paddingLeft="15dp"
         android:ems="10"
         android:inputType="text"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="250dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_et_bck"/>
 
@@ -50,9 +60,9 @@
         android:id="@+id/et_date_placeOrder"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="360dp"
-        android:paddingLeft="10dp"
-        android:hint="Data do pedido"
+        android:layout_marginTop="300dp"
+        android:paddingLeft="15dp"
+        android:hint="Data"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_et_bck"
         android:focusable="false"
@@ -63,11 +73,23 @@
         android:id="@+id/spinner_typeService_placeOrder"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="430dp"
-        android:paddingLeft="10dp"
+        android:layout_marginTop="350dp"
+        android:paddingLeft="9dp"
         android:layout_gravity="center_horizontal"
         android:entries="@array/typeService"
         android:background="@drawable/rounded_et_bck"/>
+
+    <EditText
+        android:id="@+id/et_description_placeOrder"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="400dp"
+        android:paddingLeft="15dp"
+        android:hint="Descrição"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_et_bck"
+        android:gravity="top|left"
+        android:ems="10" />
 
     <Button
         android:id="@+id/btn_placeOrder"
@@ -75,7 +97,7 @@
         android:layout_height="wrap_content"
         android:text="Criar pedido"
         android:textSize="16sp"
-        android:layout_marginTop="520dp"
+        android:layout_marginTop="550dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/btn_bck"/>
 
