@@ -1,8 +1,11 @@
 package pt.ipca.hs
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.content.SharedPreferences
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -20,6 +23,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var userDao: UserDao
     private lateinit var myDatabase: MyDatabase
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -33,8 +38,21 @@ class LoginActivity : AppCompatActivity() {
         myDatabase = MyDatabase.invoke(applicationContext)
         userDao = myDatabase.userDao()
 
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
         val intent = intent
         val email = intent.getStringExtra("email")
+
+        val savedEmail = sharedPreferences.getString("email", "")
+        val savedPassword = sharedPreferences.getString("password", "")
+
+        if (!TextUtils.isEmpty(savedEmail) && !TextUtils.isEmpty(savedPassword)) {
+            email_et_la.setText(savedEmail)
+            password_et_la.setText(savedPassword)
+            if (savedEmail != null && savedPassword != null) {
+                loginUser(savedEmail, savedPassword)
+            }
+        }
 
         btn_login_la.setOnClickListener(View.OnClickListener {
             val email_txt = email_et_la.text.toString()
@@ -54,6 +72,10 @@ class LoginActivity : AppCompatActivity() {
 
             runOnUiThread{
                 if(user != null){
+                    val editor = sharedPreferences.edit()
+                    editor.putString("email", email)
+                    editor.putString("password", password)
+                    editor.apply()
                     val userType = user.userType
                     val name = user.name
                     val id = user.id
