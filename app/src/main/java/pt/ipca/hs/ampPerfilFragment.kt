@@ -1,5 +1,6 @@
 package pt.ipca.hs
 
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -239,9 +240,13 @@ class ampPerfilFragment : Fragment() {
     }
 
     private fun logout() {
+        val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
         FirebaseAuth.getInstance().signOut()
         Toast.makeText(context, "Sessão terminada", Toast.LENGTH_SHORT).show()
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }
