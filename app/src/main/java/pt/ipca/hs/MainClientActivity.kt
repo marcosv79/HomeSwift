@@ -14,6 +14,8 @@ class MainClientActivity : AppCompatActivity() {
         binding = ActivityMainClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(amcHomeFragment())
+        val userId = intent.getIntExtra("userId", 0)
+        Log.d("MainClientActivity", "userId recebido: $userId")
 
         binding.bottomNavigationViewClient.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -32,9 +34,11 @@ class MainClientActivity : AppCompatActivity() {
 
         val name = intent.getStringExtra("name")
         val email = intent.getStringExtra("email")
+        val userId = intent.getIntExtra("userId", 0)
         val bundle = Bundle()
         bundle.putString("name", name)
         bundle.putString("email", email)
+        bundle.putInt("userId", userId)
 
         fragment.arguments = bundle
 

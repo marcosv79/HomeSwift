@@ -2,6 +2,7 @@ package pt.ipca.hs
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,7 +21,9 @@ class ProviderPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_provider_page)
 
         val providerId = intent.getIntExtra("id", 0)
-
+        val userId = intent.getIntExtra("userId", 0)
+        Log.d("ProviderPageActivity", "Provider recebido: $providerId")
+        Log.d("ProviderPageActivity", "User recebido: $userId")
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
 
@@ -34,6 +37,8 @@ class ProviderPageActivity : AppCompatActivity() {
         val messagesButton = findViewById<ImageButton>(R.id.messagesbutamc)
         messagesButton.setOnClickListener {
             val intent = Intent(this, Chat_Layout::class.java)
+            intent.putExtra("providerId", providerId)
+            intent.putExtra("userId", userId) // Pass the userId to Chat_Layout
             startActivity(intent)
         }
 

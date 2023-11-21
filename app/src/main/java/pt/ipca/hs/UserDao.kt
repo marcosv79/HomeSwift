@@ -27,6 +27,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE userType = 'Cliente' ")
     fun getUsersClient(): List<User>
 
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUserById(id: Int): User?
+
     @Query("SELECT * FROM users WHERE userType = 'Fornecedor' ")
     fun getUsersProvider(): List<User>
 

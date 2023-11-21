@@ -128,7 +128,8 @@ class amcHomeFragment : Fragment() {
 
                 launch(Dispatchers.Main) {
                     if (selectedProvider != null) {
-                        navigateToProviderPage(selectedProvider.id)
+                        val userId = arguments?.getInt("userId", 0) ?: 0
+                        navigateToProviderPage(selectedProvider.id, userId)
                     }
                 }
             }
@@ -136,9 +137,10 @@ class amcHomeFragment : Fragment() {
         return rootView
     }
 
-    private fun navigateToProviderPage(providerId: Int) {
+    private fun navigateToProviderPage(providerId: Int, userId: Int) {
         val intent = Intent(requireContext(), ProviderPageActivity::class.java)
         intent.putExtra("id", providerId)
+        intent.putExtra("userId", userId)
         startActivity(intent)
     }
 

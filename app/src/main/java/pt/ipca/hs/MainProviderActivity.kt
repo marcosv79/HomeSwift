@@ -15,6 +15,8 @@ class  MainProviderActivity : AppCompatActivity() {
         binding = ActivityMainProviderBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(ampHomeFragment())
+        val providerId = intent.getIntExtra("id", 0)
+        val userId = intent.getIntExtra("userId", 0)
 
         binding.bottomNavigationViewProvider.setOnItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
@@ -33,9 +35,11 @@ class  MainProviderActivity : AppCompatActivity() {
 
         val name = intent.getStringExtra("name")
         val email = intent.getStringExtra("email")
+        val userId = intent.getIntExtra("userId", 0)
         val bundle = Bundle()
         bundle.putString("name", name)
         bundle.putString("email", email)
+        bundle.putInt("userId", userId)
         fragment.arguments = bundle
 
         fragmentTransaction.replace(R.id.frame_layout_amp, fragment)
