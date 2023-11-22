@@ -23,4 +23,7 @@
 
         @Insert
         fun insertOrder(vararg order: Order)
+
+        @Query("DELETE FROM orders WHERE id = :id")
+        fun deleteOrderById(id: Int)
     }

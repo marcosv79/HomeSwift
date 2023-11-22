@@ -51,10 +51,6 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
             } else {
                 registerUser(name_txt, email_txt, password_txt, selectedUserType)
-                val newUser = User(name = name_txt, email = email_txt, password = password_txt, userType = selectedUserType)
-                insertUser(newUser)
-                Toast.makeText(this, "Utilizador registado com sucesso", Toast.LENGTH_SHORT).show()
-                startLoginActivity(name_txt, email_txt)
             }
         })
     }
@@ -72,6 +68,10 @@ class RegisterActivity : AppCompatActivity() {
                 )
                 userDocument.set(userData)
                     .addOnSuccessListener {
+                        val newUser = User(name = name, email = email, password = password, userType = userType)
+                        insertUser(newUser)
+                        Toast.makeText(this, "Utilizador registado com sucesso", Toast.LENGTH_SHORT).show()
+                        startLoginActivity(name, email)
                     }
                     .addOnFailureListener{
                         Toast.makeText(this, "Registo não concluído", Toast.LENGTH_SHORT).show()

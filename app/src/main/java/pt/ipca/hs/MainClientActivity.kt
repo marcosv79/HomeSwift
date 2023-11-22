@@ -21,7 +21,6 @@ class MainClientActivity : AppCompatActivity() {
         val homeFragment = amcHomeFragment.newInstance(idClient)
         replaceFragment(homeFragment)
 
-
         binding.bottomNavigationViewClient.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_amc -> replaceFragment(amcHomeFragment.newInstance(idClient))
@@ -33,7 +32,7 @@ class MainClientActivity : AppCompatActivity() {
         }
     }
 
-    fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -50,4 +49,5 @@ class MainClientActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frame_layout_amc, fragment)
         fragmentTransaction.commit()
     }
+
 }

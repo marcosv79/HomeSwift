@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,16 +64,38 @@ class amcPedidosFragment : Fragment() {
                 val users = userDao.getAll()
 
                 launch(Dispatchers.Main) {
-                    updateUIWithOrders(orders, users)
+                    updateUIWithOrders(orders, users, clientId)
                 }
             }
         }
     }
 
-    private fun updateUIWithOrders(orders: List<Order>, users: List<User>) {
+    private fun updateUIWithOrders(orders: List<Order>, users: List<User>, clientId: Int) {
         val recyclerView = rootView?.findViewById<RecyclerView>(R.id.recyclerViewPedidos)
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView?.adapter = OrderAdapter(orders, users)
+        val noOrdersMessage = rootView?.findViewById<TextView>(R.id.noOrdersMessage)
+
+        if(orders.isEmpty()){
+            noOrdersMessage?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.GONE
+        } else {
+            noOrdersMessage?.visibility = View.GONE
+            recyclerView?.visibility = View.VISIBLE
+            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView?.adapter = OrderAdapter(orders, users) { orderId ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val orderDao = myDatabase.orderDao()
+                    orderDao.deleteOrderById(orderId)
+
+                    val updatedOrders = orderDao.getOrdersByClientId(clientId)
+                    val userDao = myDatabase.userDao()
+                    val user = userDao.getAll()
+
+                    launch(Dispatchers.Main) {
+                        updateUIWithOrders(updatedOrders, user, clientId)
+                    }
+                }
+            }
+        }
     }
 
     companion object {
