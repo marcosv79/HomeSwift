@@ -30,4 +30,15 @@
         android:layout_height="match_parent"
         android:padding="16dp"/>
 
+    <TextView
+        android:id="@+id/noOrdersMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Neste momento não existem pedidos"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunibold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp" />
+
 </FrameLayout>

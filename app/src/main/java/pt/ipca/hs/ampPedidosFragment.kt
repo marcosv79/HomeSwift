@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,16 +61,38 @@ class ampPedidosFragment : Fragment() {
                 val users = userDao.getAll()
 
                 launch(Dispatchers.Main) {
-                    updateUIWithOrders(orders, users)
+                    updateUIWithOrders(orders, users, providerId)
                 }
             }
         }
     }
 
-    private fun updateUIWithOrders(orders: List<Order>, users: List<User>) {
+    private fun updateUIWithOrders(orders: List<Order>, users: List<User>, providerId: Int) {
         val recyclerView = rootView?.findViewById<RecyclerView>(R.id.recyclerViewPedidos)
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView?.adapter = OrderAdapterP(orders, users)
+        val noOrdersMessage = rootView?.findViewById<TextView>(R.id.noOrdersMessage)
+
+        if(orders.isEmpty()){
+            noOrdersMessage?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.GONE
+        } else {
+            noOrdersMessage?.visibility = View.GONE
+            recyclerView?.visibility = View.VISIBLE
+            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView?.adapter = OrderAdapterP(orders, users) { orderId ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val orderDao = myDatabase.orderDao()
+                    orderDao.deleteOrderById(orderId)
+
+                    val updatedOrders = orderDao.getOrdersByProviderId(providerId)
+                    val userDao = myDatabase.userDao()
+                    val user = userDao.getAll()
+
+                    launch(Dispatchers.Main) {
+                        updateUIWithOrders(updatedOrders, user, providerId)
+                    }
+                }
+            }
+        }
     }
 
     companion object {
