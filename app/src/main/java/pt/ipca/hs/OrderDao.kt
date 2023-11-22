@@ -26,4 +26,11 @@
 
         @Query("DELETE FROM orders WHERE id = :id")
         fun deleteOrderById(id: Int)
+
+        @Query("UPDATE orders SET status = :newStatus WHERE id = :orderId")
+        fun updateOrderStatus(orderId: Int, newStatus: String)
+
+        @Query("SELECT * FROM orders WHERE idProvider = :providerId AND status = :status")
+        fun getOrdersByProviderAndStatus(providerId: Int, status: String): List<Order>
+
     }

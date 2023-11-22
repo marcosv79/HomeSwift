@@ -8,7 +8,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class OrderAdapterP(private val orders: List<Order>, private val users: List<User>, private val cancelOrderListener: (Int) -> Unit) : RecyclerView.Adapter<OrderAdapterP.OrderViewHolder>() {
+class OrderAdapterP(private val orders: List<Order>,
+                    private val users: List<User>,
+                    private val cancelOrderListener: (Int) -> Unit,
+                    private val finishOrderListener: (Int) -> Unit,
+    ) : RecyclerView.Adapter<OrderAdapterP.OrderViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_orderp, parent, false)
@@ -30,7 +34,15 @@ class OrderAdapterP(private val orders: List<Order>, private val users: List<Use
 
         holder.btnCancelOrder.setOnClickListener {
             cancelOrderListener.invoke(order.id)
-            Toast.makeText(holder.itemView.context, "Pedido Cancelado", Toast.LENGTH_SHORT).show()        }
+            Toast.makeText(holder.itemView.context, "Pedido cancelado", Toast.LENGTH_SHORT).show()
+        }
+
+        holder.btnFinishOrder.visibility = if (order.status == "Ativo") View.VISIBLE else View.GONE
+
+        holder.btnFinishOrder.setOnClickListener {
+            finishOrderListener.invoke(order.id)
+            Toast.makeText(holder.itemView.context, "Pedido concluído", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -44,6 +56,7 @@ class OrderAdapterP(private val orders: List<Order>, private val users: List<Use
         val textTypeService: TextView = itemView.findViewById(R.id.textTypeService)
         val textStatus: TextView = itemView.findViewById(R.id.textStatus)
         val textClientName: TextView = itemView.findViewById(R.id.textClientName)
+        val btnFinishOrder: Button = itemView.findViewById(R.id.btnFinishOrder)
         val btnCancelOrder: Button = itemView.findViewById(R.id.btnCancelOrder)
     }
 }

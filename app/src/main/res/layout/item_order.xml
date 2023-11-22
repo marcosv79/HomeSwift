@@ -57,7 +57,7 @@
     <Button
         android:id="@+id/btnCancelOrder"
         android:layout_width="97dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:text="Cancelar"
         android:layout_alignBaseline="@+id/textStatus"
         android:layout_alignParentEnd="true"

@@ -1,9 +1,14 @@
 package pt.ipca.hs
 
+import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -45,20 +50,43 @@ class ampPedidosFragment : Fragment() {
         myDatabase = MyDatabase.invoke(requireContext())
         rootView = inflater.inflate(R.layout.fragment_amp_pedidos, container, false)
 
+        val spinnerFilter = rootView?.findViewById<Spinner>(R.id.spinnerFilterOrderStatus)
+        val statusFilterOptions = listOf("Todos", "Ativo", "Concluído")
+
+        spinnerFilter?.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, statusFilterOptions)
+
+        spinnerFilter?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long){
+                val selectedStatus = statusFilterOptions[position]
+                if (idProvider != null) {
+                    loadOrdersForProvider(idProvider,selectedStatus)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
         idProvider?.let { providerId ->
-            loadOrdersForProvider(providerId)
+            loadOrdersForProvider(providerId, "Todos")
         }
 
         return rootView
     }
 
-    private fun loadOrdersForProvider(providerId: Int) {
+    private fun loadOrdersForProvider(providerId: Int, statusFilter: String) {
         rootView?.let { root ->
             lifecycleScope.launch(Dispatchers.IO) {
-                val orderDao = myDatabase.orderDao()
-                val orders = orderDao.getOrdersByProviderId(providerId)
                 val userDao = myDatabase.userDao()
                 val users = userDao.getAll()
+
+                val orderDao = myDatabase.orderDao()
+                val orders =
+                    if(statusFilter == "Todos"){
+                        orderDao.getOrdersByProviderId(providerId)
+                    } else {
+                        orderDao.getOrdersByProviderAndStatus(providerId, statusFilter)
+                    }
 
                 launch(Dispatchers.Main) {
                     updateUIWithOrders(orders, users, providerId)
@@ -71,27 +99,43 @@ class ampPedidosFragment : Fragment() {
         val recyclerView = rootView?.findViewById<RecyclerView>(R.id.recyclerViewPedidos)
         val noOrdersMessage = rootView?.findViewById<TextView>(R.id.noOrdersMessage)
 
-        if(orders.isEmpty()){
+        if (orders.isEmpty()) {
             noOrdersMessage?.visibility = View.VISIBLE
             recyclerView?.visibility = View.GONE
         } else {
             noOrdersMessage?.visibility = View.GONE
             recyclerView?.visibility = View.VISIBLE
             recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-            recyclerView?.adapter = OrderAdapterP(orders, users) { orderId ->
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val orderDao = myDatabase.orderDao()
-                    orderDao.deleteOrderById(orderId)
+            recyclerView?.adapter = OrderAdapterP(orders, users,
+                { orderId ->
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val orderDao = myDatabase.orderDao()
+                        orderDao.deleteOrderById(orderId)
 
-                    val updatedOrders = orderDao.getOrdersByProviderId(providerId)
-                    val userDao = myDatabase.userDao()
-                    val user = userDao.getAll()
+                        val updatedOrders = orderDao.getOrdersByProviderId(providerId)
+                        val userDao = myDatabase.userDao()
+                        val user = userDao.getAll()
 
-                    launch(Dispatchers.Main) {
-                        updateUIWithOrders(updatedOrders, user, providerId)
+                        launch(Dispatchers.Main) {
+                            updateUIWithOrders(updatedOrders, user, providerId)
+                        }
+                    }
+                },
+                { orderId ->
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val orderDao = myDatabase.orderDao()
+                        orderDao.updateOrderStatus(orderId, "Concluído")
+
+                        val updatedOrders = orderDao.getOrdersByProviderId(providerId)
+                        val userDao = myDatabase.userDao()
+                        val user = userDao.getAll()
+
+                        launch(Dispatchers.Main) {
+                            updateUIWithOrders(updatedOrders, user, providerId)
+                        }
                     }
                 }
-            }
+            )
         }
     }
 
