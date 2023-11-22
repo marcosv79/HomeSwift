@@ -32,19 +32,18 @@ class ampMensagensFragment : Fragment() {
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
-                val providerId = selectedMessage.receiverId.toInt()
-                val userId = selectedMessage.senderId.toInt()
-                Log.d("ampMensagens", "Provider ID: $providerId, User ID: $userId")
+                val receiverid = selectedMessage.senderId.toInt()
+                val senderid = selectedMessage.receiverId.toInt()
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val providerName = getUserName(selectedMessage.receiverId.toInt())
+                    val providerName = getUserName(selectedMessage.senderId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
 
-                    intent.putExtra("id", providerId)
-                    intent.putExtra("idC", userId)
+                    intent.putExtra("id", senderid)
+                    intent.putExtra("idC", receiverid)
                     intent.putExtra("providerName", providerName)
 
-                    Log.d("ampMensagens", "Provider ID: $providerId, User ID: $userId, Provider Name: $providerName")
+                    Log.d("ampMensagens", "receiverid: $receiverid, senderid: $senderid, receivername: $providerName")
 
                     startActivity(intent)
                 }

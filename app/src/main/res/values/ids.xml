@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="frame_layout_amc" type="id" />
+    <item name="autoCompleteTextView_service_amc_home" type="id" />
+    <item name="lv_service_amc_home" type="id" />
 </resources>
