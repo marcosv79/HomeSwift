@@ -44,4 +44,5 @@ interface UserDao {
 
     @Update
     fun updateUser(vararg user: User)
+
 }

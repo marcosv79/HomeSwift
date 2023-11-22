@@ -5,21 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ampMensagensFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <ListView
         android:id="@+id/listViewContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <ImageButton
-        android:id="@+id/messagesbutamp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="104dp"
-        android:contentDescription="@string/app_name"
-        android:background="@drawable/messages_button"
-        android:src="@drawable/baseline_add_24"
-        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
 </FrameLayout>

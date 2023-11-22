@@ -32,18 +32,18 @@ class amcMensagensFragment : Fragment() {
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
-                val providerId = selectedMessage.receiverId.toInt()
-                val userId = selectedMessage.senderId.toInt()
+                val receiverid = selectedMessage.receiverId.toInt()
+                val senderid = selectedMessage.senderId.toInt()
 
                 lifecycleScope.launch(Dispatchers.Main) {
                     val providerName = getUserName(selectedMessage.receiverId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
 
-                    intent.putExtra("id", providerId)
-                    intent.putExtra("idC", userId)
+                    intent.putExtra("id", receiverid)
+                    intent.putExtra("idC", senderid)
                     intent.putExtra("providerName", providerName)
 
-                    Log.d("Chat_Layout", "Provider ID: $providerId, User ID: $userId, Provider Name: $providerName")
+                    Log.d("amcMensagens", "receiverid: $receiverid, senderid: $senderid, receivername: $providerName")
 
                     startActivity(intent)
                 }
