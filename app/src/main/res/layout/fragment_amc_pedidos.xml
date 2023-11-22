@@ -25,6 +25,7 @@
         android:id="@+id/recyclerViewPedidos"
         android:layout_gravity="center_horizontal"
         android:layout_width="350dp"
+        android:fontFamily="@font/nunibold"
         android:layout_marginTop="150dp"
         android:layout_height="match_parent"
         android:padding="16dp"/>

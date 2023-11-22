@@ -135,6 +135,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_gravity="bottom|start"
+            android:fontFamily="@font/nunibold"
             android:text="Fazer pedido"
             android:background="@drawable/rounded_et_bck"/>
     </FrameLayout>

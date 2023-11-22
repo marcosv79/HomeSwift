@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
@@ -37,6 +38,12 @@ class LoginActivity : AppCompatActivity() {
         //firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(applicationContext)
         userDao = myDatabase.userDao()
+
+        val createAccountTV = findViewById<TextView>(R.id.create_account_tv)
+        createAccountTV.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 

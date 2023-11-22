@@ -33,7 +33,7 @@ class MainClientActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -50,5 +50,4 @@ class MainClientActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frame_layout_amc, fragment)
         fragmentTransaction.commit()
     }
-
 }
