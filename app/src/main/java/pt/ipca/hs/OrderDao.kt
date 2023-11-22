@@ -12,6 +12,9 @@
         @Query("SELECT * FROM orders WHERE idClient = :idClient")
         fun getOrdersByClientId(idClient: Int): List<Order>
 
+        @Query("SELECT * FROM orders WHERE idProvider = :idProvider")
+        fun getOrdersByProviderId(idProvider: Int): List<Order>
+
         @Query("SELECT * FROM orders WHERE id = :id")
         fun findById(id: Int): Order
 
