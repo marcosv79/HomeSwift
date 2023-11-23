@@ -34,6 +34,8 @@ class OrderAdapterP(private val orders: List<Order>,
         holder.textTypeService.text = "${order.typeService}"
         //holder.textStatus.text = "${order.status}"
 
+        holder.btnCancelOrder.visibility = if (order.status == "Concluído") View.GONE else View.VISIBLE
+
         holder.btnCancelOrder.setOnClickListener {
             cancelOrderListener.invoke(order.id)
             Toast.makeText(holder.itemView.context, "Pedido cancelado", Toast.LENGTH_SHORT).show()

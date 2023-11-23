@@ -154,7 +154,7 @@ class ampPedidosFragment : Fragment() {
                 val dialogBuilder = AlertDialog.Builder(requireContext())
                 dialogBuilder.setTitle("Pedido ${order.id}")
                 dialogBuilder.setMessage(
-                            "Cliente: ${user.id}\n" +
+                            "Cliente: ${user.name}\n" +
                             "Morada: ${user.address} - ${user.location}\n" +
                             "Data: ${order.date}\n" +
                             "Custo: ${order.cost}\n" +
