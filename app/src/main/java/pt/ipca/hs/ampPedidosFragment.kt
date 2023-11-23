@@ -1,5 +1,7 @@
 package pt.ipca.hs
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -63,7 +65,6 @@ class ampPedidosFragment : Fragment() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
         }
 
@@ -134,10 +135,43 @@ class ampPedidosFragment : Fragment() {
                             updateUIWithOrders(updatedOrders, user, providerId)
                         }
                     }
+                },
+                { order ->
+                    showOrderDetailsDialog(order.id)
                 }
             )
         }
     }
+
+    private fun showOrderDetailsDialog(orderId: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val orderDao = myDatabase.orderDao()
+            val order = orderDao.findById(orderId)
+            val userDao = myDatabase.userDao()
+            val user = userDao.findById(order.idClient)
+
+            launch(Dispatchers.Main) {
+                val dialogBuilder = AlertDialog.Builder(requireContext())
+                dialogBuilder.setTitle("Pedido ${order.id}")
+                dialogBuilder.setMessage(
+                            "Cliente: ${user.id}\n" +
+                            "Morada: ${user.address} - ${user.location}\n" +
+                            "Data: ${order.date}\n" +
+                            "Custo: ${order.cost}\n" +
+                            "Tipo de serviço: ${order.typeService}\n" +
+                            "Estado: ${order.status}\n" +
+                            "Descrição: ${order.description}"
+                )
+                dialogBuilder.setPositiveButton("Fechar") { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                val alertDialog = dialogBuilder.create()
+                alertDialog.show()
+            }
+        }
+    }
+
 
     companion object {
         /**
