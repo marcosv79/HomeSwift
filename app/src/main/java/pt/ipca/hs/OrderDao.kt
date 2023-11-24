@@ -30,7 +30,14 @@
         @Query("UPDATE orders SET status = :newStatus WHERE id = :orderId")
         fun updateOrderStatus(orderId: Int, newStatus: String)
 
+        @Query("UPDATE orders SET evalStar = :evalStar, evalComment = :evalComment WHERE id = :orderId")
+        fun updateOrderEvaluation(orderId: Int, evalStar: Int, evalComment: String)
+
         @Query("SELECT * FROM orders WHERE idProvider = :providerId AND status = :status")
         fun getOrdersByProviderAndStatus(providerId: Int, status: String): List<Order>
+
+        @Query("SELECT * FROM orders WHERE idClient = :clientId AND status = :status")
+        fun getOrdersByClientAndStatus(clientId: Int, status: String): List<Order>
+
 
     }

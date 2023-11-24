@@ -1,13 +1,10 @@
 package pt.ipca.hs
 
 import android.app.AlertDialog
-import android.content.Intent
-import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -43,7 +40,7 @@ class ampPedidosFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-//TESTE
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
