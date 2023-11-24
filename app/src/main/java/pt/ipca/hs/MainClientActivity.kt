@@ -16,6 +16,7 @@ class MainClientActivity : AppCompatActivity() {
         binding = ActivityMainClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val currentUserId = intent.getIntExtra("currentUserId", -1)
         val idClient = intent.getIntExtra("idC", 0)
 
         val homeFragment = amcHomeFragment.newInstance(idClient)
@@ -44,6 +45,9 @@ class MainClientActivity : AppCompatActivity() {
         bundle.putString("name", name)
         bundle.putString("email", email)
         bundle.putInt("idC", idClient)
+
+        // Adicione os IDs ao bundle do fragment
+        bundle.putInt("userId", idClient)
 
         fragment.arguments = bundle
         fragmentTransaction.replace(R.id.frame_layout_amc, fragment)

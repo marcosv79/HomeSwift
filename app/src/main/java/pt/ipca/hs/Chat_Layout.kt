@@ -33,8 +33,8 @@ class Chat_Layout : AppCompatActivity() {
 
         // Recupera o ID do fornecedor e o nome da Intent
         // Recuperar valores do Intent
-        providerId = intent.getIntExtra("id", 0)
-        userId = intent.getIntExtra("idC", 0)
+        providerId = intent.getIntExtra("providerId", 0)
+        userId = intent.getIntExtra("userId", 0)
         providerName = intent.getStringExtra("providerName")
 
         // Agora você pode usar os valores conforme necessário
