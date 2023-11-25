@@ -39,5 +39,6 @@
         @Query("SELECT * FROM orders WHERE idClient = :clientId AND status = :status")
         fun getOrdersByClientAndStatus(clientId: Int, status: String): List<Order>
 
-
+        @Query("SELECT evalStar FROM orders WHERE id = :id AND evalStar > 0")
+        fun getOrderEvaluation(id: Int): Int?
     }

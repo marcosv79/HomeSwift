@@ -151,6 +151,8 @@ class amcPedidosFragment : Fragment() {
             val userDao = myDatabase.userDao()
             val user = userDao.findById(order.idProvider)
 
+            val existingRating = orderDao.getOrderEvaluation(orderId)
+
             launch(Dispatchers.Main) {
                 val dialogBuilder = AlertDialog.Builder(requireContext())
                 dialogBuilder.setTitle("Pedido ${order.id}")
@@ -164,9 +166,8 @@ class amcPedidosFragment : Fragment() {
                             "Descrição: ${order.description}"
                 )
 
-                // Adiciona um botão para deixar uma avaliação apenas se o estado for concluído
-                if (order.status == "Concluído") {
-                    dialogBuilder.setNeutralButton("Deixar Avaliação") { _, _ ->
+                if (order.status == "Concluído" && existingRating == null) {
+                    dialogBuilder.setNeutralButton("Deixar avaliação") { _, _ ->
                         showRatingDialog(orderId)
                     }
                 }
@@ -183,13 +184,11 @@ class amcPedidosFragment : Fragment() {
 
     private fun showRatingDialog(orderId: Int) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Deixar Avaliação")
+        builder.setTitle("Deixar avaliação")
 
-        // Infla o layout do diálogo de avaliação (pode ser um layout personalizado)
         val view = layoutInflater.inflate(R.layout.rating_dialog_layout, null)
         builder.setView(view)
 
-        // Adiciona um RatingBar para permitir ao utilizador dar uma avaliação em estrelas
         val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
         val editTextComment = view.findViewById<EditText>(R.id.editTextComment)
 
@@ -198,8 +197,7 @@ class amcPedidosFragment : Fragment() {
             val comment = editTextComment.text.toString()
             saveRatingToDatabase(orderId, rating, comment)
 
-            // Mostra um Toast indicando que a avaliação foi submetida corretamente
-            Toast.makeText(requireContext(), "Avaliação submetida com sucesso!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Avaliação submetida com sucesso", Toast.LENGTH_SHORT).show()
 
             dialog.dismiss()
         }
@@ -216,7 +214,6 @@ class amcPedidosFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val orderDao = myDatabase.orderDao()
 
-            // Atualiza a ordem no banco de dados com a nova avaliação e comentário
             orderDao.updateOrderEvaluation(orderId, rating.toInt(), comment)
         }
     }
