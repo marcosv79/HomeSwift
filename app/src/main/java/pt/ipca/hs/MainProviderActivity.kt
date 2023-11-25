@@ -18,6 +18,10 @@ class  MainProviderActivity : AppCompatActivity() {
         val providerId = intent.getIntExtra("id", 0)
         val userId = intent.getIntExtra("userId", 0)
 
+
+
+
+
         binding.bottomNavigationViewProvider.setOnItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.home_amp -> replaceFragment(ampHomeFragment())
@@ -29,17 +33,25 @@ class  MainProviderActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         val name = intent.getStringExtra("name")
         val email = intent.getStringExtra("email")
         val id = intent.getIntExtra("id", 0)
+        val currentUserId = intent.getIntExtra("currentUserId", -1)
+
         val bundle = Bundle()
         bundle.putString("name", name)
         bundle.putString("email", email)
         bundle.putInt("id", id)
+        bundle.putInt("currentUserId", currentUserId)
+
+        // Adicione os IDs ao bundle do fragment
+        bundle.putInt("providerId", id)
+        bundle.putInt("userId", currentUserId)
+
         fragment.arguments = bundle
 
         fragmentTransaction.replace(R.id.frame_layout_amp, fragment)

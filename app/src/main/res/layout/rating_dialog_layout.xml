@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingBar"
         android:layout_marginTop="16dp"
-        android:hint="Adicionar Comentário"
+        android:hint="Adicionar comentário"
         android:inputType="textMultiLine"
         android:gravity="start"
         android:minLines="3"/>

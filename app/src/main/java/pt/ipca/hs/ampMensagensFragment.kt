@@ -32,23 +32,23 @@ class ampMensagensFragment : Fragment() {
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
-                val receiverid = selectedMessage.senderId.toInt()
-                val senderid = selectedMessage.receiverId.toInt()
+                val providerId = arguments?.getInt("providerId", 0) ?: 0
+                val userId = arguments?.getInt("userId", 0) ?: 0
+
+
 
                 lifecycleScope.launch(Dispatchers.Main) {
                     val providerName = getUserName(selectedMessage.senderId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
-
-                    intent.putExtra("id", senderid)
-                    intent.putExtra("idC", receiverid)
+                    intent.putExtra("id", userId)
+                    intent.putExtra("idProvider", providerId)
                     intent.putExtra("providerName", providerName)
-
-                    Log.d("ampMensagens", "receiverid: $receiverid, senderid: $senderid, receivername: $providerName")
 
                     startActivity(intent)
                 }
             }
         }
+
         getMessages()
 
         return rootView
@@ -58,7 +58,11 @@ class ampMensagensFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val messageDao = myDatabase.messageDao()
 
-            messagesList = messageDao.getAllMessages() // Inicialize a variável aqui
+            val providerId = arguments?.getInt("providerId", 0) ?: 0
+            Log.d("ampMensagensFragment", "Provider ID: $providerId")
+
+            // Modificado para obter apenas as mensagens onde o receiverId é igual ao providerId
+            messagesList = messageDao.getMessagesForProvider(providerId)
 
             launch(Dispatchers.Main) {
                 val adapter = createMessageAdapter(messagesList)
@@ -75,18 +79,23 @@ class ampMensagensFragment : Fragment() {
 
         // Agrupa mensagens por usuário
         val messagesByUser =
-            messagesList.groupBy { it.receiverId } // Alterado para usar o receiverId
+            messagesList.groupBy { it.senderId } // Alterado para usar o receiverId
 
         // Adiciona apenas a última mensagem de cada usuário ao adaptador
         for ((userId, userMessages) in messagesByUser) {
-            val userName = userMessages.firstOrNull()?.let { getUserName(it.receiverId.toInt()) }
+            val userName = userMessages.firstOrNull()?.let { getUserName(it.senderId.toInt()) }
                 ?: "Nome não disponível"
             val lastMessage = userMessages.lastOrNull()?.message ?: "Sem mensagens"
             adapter.add("$userName\n$lastMessage")
         }
 
+        // Adicione logs para verificar as informações dentro da lista de mensagens
+        Log.d("ampMensagensFragment", "Messages List: $messagesList")
+        Log.d("ampMensagensFragment", "Adapter Count: ${adapter.count}")
+
         return adapter
     }
+
 
     private suspend fun getUserName(userId: Int): String {
         return withContext(Dispatchers.IO) {

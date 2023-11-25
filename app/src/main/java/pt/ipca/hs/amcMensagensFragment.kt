@@ -32,18 +32,15 @@ class amcMensagensFragment : Fragment() {
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val selectedMessage = messagesList[position]
-                val receiverid = selectedMessage.receiverId.toInt()
-                val senderid = selectedMessage.senderId.toInt()
+                val providerId = arguments?.getInt("providerId", 0) ?: 0
+                val userId = arguments?.getInt("userId", 0) ?: 0
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val providerName = getUserName(selectedMessage.receiverId.toInt())
+                    val providerName = getUserName(selectedMessage.senderId.toInt())
                     val intent = Intent(requireContext(), Chat_Layout::class.java)
-
-                    intent.putExtra("id", receiverid)
-                    intent.putExtra("idC", senderid)
+                    intent.putExtra("id", userId)
+                    intent.putExtra("idProvider", providerId)  // Certifique-se de usar "idProvider"
                     intent.putExtra("providerName", providerName)
-
-                    Log.d("amcMensagens", "receiverid: $receiverid, senderid: $senderid, receivername: $providerName")
 
                     startActivity(intent)
                 }
@@ -58,7 +55,11 @@ class amcMensagensFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val messageDao = myDatabase.messageDao()
 
-            messagesList = messageDao.getAllMessages() // Inicialize a variável aqui
+            val userId = arguments?.getInt("userId", 0) ?: 0
+            Log.d("ampMensagensFragment", "User ID: $userId")
+
+            // Modificado para obter apenas as mensagens onde o receiverId é igual ao userId
+            messagesList = messageDao.getMessagesForProvider(userId)
 
             launch(Dispatchers.Main) {
                 val adapter = createMessageAdapter(messagesList)
@@ -75,15 +76,19 @@ class amcMensagensFragment : Fragment() {
 
         // Agrupa mensagens por usuário
         val messagesByUser =
-            messagesList.groupBy { it.receiverId } // Alterado para usar o receiverId
+            messagesList.groupBy { it.senderId } // Alterado para usar o receiverId
 
         // Adiciona apenas a última mensagem de cada usuário ao adaptador
-        for ((userId, userMessages) in messagesByUser) {
-            val userName = userMessages.firstOrNull()?.let { getUserName(it.receiverId.toInt()) }
+        for ((senderId, userMessages) in messagesByUser) {
+            val userName = userMessages.firstOrNull()?.let { getUserName(it.senderId.toInt()) }
                 ?: "Nome não disponível"
             val lastMessage = userMessages.lastOrNull()?.message ?: "Sem mensagens"
             adapter.add("$userName\n$lastMessage")
         }
+
+        // Adicione logs para verificar as informações dentro da lista de mensagens
+        Log.d("ampMensagensFragment", "Messages List: $messagesList")
+        Log.d("ampMensagensFragment", "Adapter Count: ${adapter.count}")
 
         return adapter
     }

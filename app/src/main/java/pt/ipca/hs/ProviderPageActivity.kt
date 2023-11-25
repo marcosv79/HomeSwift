@@ -1,5 +1,6 @@
 package pt.ipca.hs
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,8 @@ class ProviderPageActivity : AppCompatActivity() {
 
         val userId = intent.getIntExtra("idC", 0)
         val providerId = intent.getIntExtra("id", 0)
+        val currentUserId = intent.getIntExtra("currentUserId", -1)
+
         Log.d("ProviderPageActivity", "Provider ID: $providerId, User ID: $userId")
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -45,8 +48,9 @@ class ProviderPageActivity : AppCompatActivity() {
         val messagesButton = findViewById<ImageButton>(R.id.messagesbutamc)
         messagesButton.setOnClickListener {
             val intent = Intent(this, Chat_Layout::class.java)
-            intent.putExtra("id", providerId)
-            intent.putExtra("idC", userId)
+            intent.putExtra("providerId", providerId)
+            intent.putExtra("userId", userId)
+            intent.putExtra("CurrentUserId", currentUserId)
             startActivity(intent)
         }
 
