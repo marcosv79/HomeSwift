@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,8 @@ class ampMensagensFragment : Fragment() {
     private lateinit var listViewMessages: ListView
     private lateinit var myDatabase: MyDatabase
     private lateinit var messagesList: List<Message>
+    private var providerid: Int? = 0
+    private lateinit var idclients: ArrayList<Int>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,29 +29,37 @@ class ampMensagensFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_amp_mensagens, container, false)
 
+        idclients = ArrayList<Int>()
+
         listViewMessages = rootView.findViewById(R.id.listViewContacts)
         myDatabase = MyDatabase.invoke(requireContext())
 
+        providerid = arguments?.getInt("providerId", 0)
+
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
-                val selectedMessage = messagesList[position]
-                val providerId = arguments?.getInt("providerId", 0) ?: 0
-                val userId = arguments?.getInt("userId", 0) ?: 0
 
+                val clienteid = idclients[position]
 
+                if (clienteid > 0) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        val intent = Intent(requireContext(), Chat_Layout::class.java)
+                        intent.putExtra("providerId", clienteid)
+                        intent.putExtra("userId", providerid)
+                        intent.putExtra("CurrentUserId", providerid)
 
-                lifecycleScope.launch(Dispatchers.Main) {
-                    val providerName = getUserName(selectedMessage.senderId.toInt())
-                    val intent = Intent(requireContext(), Chat_Layout::class.java)
-                    intent.putExtra("id", userId)
-                    intent.putExtra("idProvider", providerId)
-                    intent.putExtra("providerName", providerName)
+                        startActivity(intent)
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "cliente invalido, contate o admin",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                    startActivity(intent)
                 }
             }
         }
-
         getMessages()
 
         return rootView
@@ -58,11 +69,9 @@ class ampMensagensFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val messageDao = myDatabase.messageDao()
 
-            val providerId = arguments?.getInt("providerId", 0) ?: 0
-            Log.d("ampMensagensFragment", "Provider ID: $providerId")
 
             // Modificado para obter apenas as mensagens onde o receiverId é igual ao providerId
-            messagesList = messageDao.getMessagesForProvider(providerId)
+            messagesList = messageDao.getUserMessages(providerid)
 
             launch(Dispatchers.Main) {
                 val adapter = createMessageAdapter(messagesList)
@@ -83,8 +92,16 @@ class ampMensagensFragment : Fragment() {
 
         // Adiciona apenas a última mensagem de cada usuário ao adaptador
         for ((userId, userMessages) in messagesByUser) {
-            val userName = userMessages.firstOrNull()?.let { getUserName(it.senderId.toInt()) }
-                ?: "Nome não disponível"
+            var userName = "Nome não disponível"
+            var idclient = 0
+            userMessages.forEach {
+                if (it.senderId.toInt() != providerid) {
+                    idclient = it.senderId.toInt()
+                    userName = getUserName(it.senderId.toInt())
+                    Log.d("amcMensagensFragment", "Added to idProviders: ${it.senderId}")
+                }
+            }
+            idclients.add(idclient)
             val lastMessage = userMessages.lastOrNull()?.message ?: "Sem mensagens"
             adapter.add("$userName\n$lastMessage")
         }
@@ -92,7 +109,7 @@ class ampMensagensFragment : Fragment() {
         // Adicione logs para verificar as informações dentro da lista de mensagens
         Log.d("ampMensagensFragment", "Messages List: $messagesList")
         Log.d("ampMensagensFragment", "Adapter Count: ${adapter.count}")
-
+        Log.d("ampMensagens", "ID Prov: ${idclients}")
         return adapter
     }
 

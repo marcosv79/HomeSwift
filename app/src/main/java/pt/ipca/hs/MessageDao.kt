@@ -25,8 +25,13 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE receiver_id = :providerId")
     suspend fun getMessagesForProvider(providerId: Int): List<Message>
 
+    @Query("SELECT * FROM messages WHERE receiver_id = :userId OR sender_id = :userId Group by sender_id,receiver_id")
+    suspend fun getUserMessages(userId: Int?): List<Message>
+
     @Query("SELECT * FROM messages WHERE id = :id")
     fun findMessageById(id: Long): Message
+
+
     @Query("SELECT * FROM messages WHERE receiver_id = :receiverId")
     suspend fun getMessagesForUser(receiverId: Int): List<Message>
 
