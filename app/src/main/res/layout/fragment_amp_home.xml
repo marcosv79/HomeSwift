@@ -6,13 +6,66 @@
     android:gravity="center"
     tools:context=".ampHomeFragment">
 
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/hs"/>
+
     <TextView
         android:id="@+id/welcome_provider_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:fontFamily="@font/nunibold"
         android:text=""
-        android:textSize="26dp" />
+        android:textSize="26dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="120dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_service_amp_home"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="220dp"
+        android:paddingLeft="10dp"
+        android:fontFamily="@font/nunibold"
+        android:layout_marginLeft="56dp"
+        android:entries="@array/service"
+        android:background="@drawable/rounded_et_bck"/>
+
+    <EditText
+        android:id="@+id/et_cost_amp_home"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="290dp"
+        android:fontFamily="@font/nunibold"
+        android:hint="Custo"
+        android:paddingLeft="15dp"
+        android:layout_marginLeft="56dp"
+        android:inputType="number"
+        android:background="@drawable/rounded_et_bck"/>
+
+    <Button
+        android:id="@+id/btn_save_amp_home"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        android:textSize="16sp"
+        android:fontFamily="@font/nunibold"
+        android:layout_marginTop="380dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_bck"/>
+
+    <EditText
+        android:id="@+id/et_email_amp_home"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:paddingLeft="15dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:fontFamily="@font/nunibold"
+        android:layout_marginTop="500dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_et_bck"/>
 
 </FrameLayout>

@@ -38,8 +38,6 @@ class ampPerfilFragment : Fragment() {
     private lateinit var passwordEditText: EditText
     private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
-    private lateinit var spinnerService: Spinner
-    private lateinit var costEditText: EditText
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -68,8 +66,6 @@ class ampPerfilFragment : Fragment() {
         passwordEditText = view.findViewById(R.id.et_password_amp_perfil)
         moradaEditText = view.findViewById(R.id.et_address_amp_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amp_perfil)
-        spinnerService = view.findViewById(R.id.spinner_service_amp_perfil)
-        costEditText = view.findViewById(R.id.et_cost_amp_perfil)
         btnGuardar = view.findViewById(R.id.btn_save_amp_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_provider)
 
@@ -98,8 +94,6 @@ class ampPerfilFragment : Fragment() {
             if(existingUser != null){
                 val address = moradaEditText.text.toString()
                 val selectedLocation = spinnerLocation.selectedItem.toString()
-                val selectedService = spinnerService.selectedItem.toString()
-                val cost = costEditText.text.toString()
                 val newPassword = passwordEditText.text.toString()
 
                 if (address.isNotEmpty()) {
@@ -116,24 +110,6 @@ class ampPerfilFragment : Fragment() {
                 } else {
                     activity?.runOnUiThread {
                         Toast.makeText(context, "Preencha a localidade", Toast.LENGTH_SHORT).show()
-                    }
-                    return@Thread
-                }
-
-                if (selectedService.isNotEmpty()) {
-                    existingUser.service = selectedService
-                } else {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context, "Preencha o serviço", Toast.LENGTH_SHORT).show()
-                    }
-                    return@Thread
-                }
-
-                if (cost.isNotEmpty()) {
-                    existingUser.cost = cost
-                } else {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context, "Preencha o custo", Toast.LENGTH_SHORT).show()
                     }
                     return@Thread
                 }
@@ -160,8 +136,6 @@ class ampPerfilFragment : Fragment() {
     private fun updateFirestore(email: String){
         val address = moradaEditText.text.toString()
         val selectedLocation = spinnerLocation.selectedItem.toString()
-        val selectedService = spinnerService.selectedItem.toString()
-        val cost = costEditText.text.toString()
         val newPassword = passwordEditText.text.toString()
 
         val userCollection = firestore.collection("users")
@@ -171,9 +145,7 @@ class ampPerfilFragment : Fragment() {
             for(document in documents){
                 document.reference.update(
                     "address", address,
-                    "location", selectedLocation,
-                    "service", selectedService,
-                    "cost", cost
+                    "location", selectedLocation
                 ).addOnSuccessListener {
                     if(newPassword.isNotEmpty()){
                         auth.currentUser?.updatePassword(newPassword)
@@ -218,16 +190,6 @@ class ampPerfilFragment : Fragment() {
                             val adapter = spinnerLocation.adapter as ArrayAdapter<String>
                             val position = adapter.getPosition(userLocation)
                             spinnerLocation.setSelection(position)
-                        }
-
-                        if(!userService.isNullOrEmpty()){
-                            val adapter = spinnerService.adapter as ArrayAdapter<String>
-                            val position = adapter.getPosition(userService)
-                            spinnerService.setSelection(position)
-                        }
-
-                        if(!userCost.isNullOrEmpty()){
-                            costEditText.setText(userCost)
                         }
                     }
                 }

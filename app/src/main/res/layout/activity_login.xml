@@ -65,7 +65,7 @@
         android:id="@+id/create_account_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Não tem conta? Criar conta"
+        android:text="Não tem conta? Criar agora"
         android:textSize="16sp"
         android:layout_below="@id/btn_login_la"
         android:fontFamily="@font/nunibold"
