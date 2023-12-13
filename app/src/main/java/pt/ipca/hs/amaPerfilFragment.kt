@@ -161,7 +161,7 @@ class amaPerfilFragment : Fragment() {
             }
         }
     }
-//aosdaokisdaopksdpaskpo
+
     private fun loadAdminData(){
         val userEmail = getEmailFromArguments()
 
