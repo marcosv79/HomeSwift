@@ -73,13 +73,25 @@ class amaHomeFragment : Fragment() {
 
     private fun updateUIWithReviews(reviews: List<Order>) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerViewAllReviews)
+        val noOrdersMessage = view?.findViewById<TextView>(R.id.noOrdersMessage)
 
-        val adapter = AllReviewsAdapter(reviews) { order ->
-            onDeleteReview(order)
+        if(reviews.isEmpty()){
+            noOrdersMessage?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.GONE
+        }
+        else{
+            noOrdersMessage?.visibility = View.GONE
+            recyclerView?.visibility = View.VISIBLE
+
+            val adapter = AllReviewsAdapter(reviews) { order ->
+                onDeleteReview(order)
+            }
+
+            recyclerView?.adapter = adapter
+            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         }
 
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+
     }
 
     private fun onDeleteReview(order: Order) {
