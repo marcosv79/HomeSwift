@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +34,16 @@ class amaHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ama_home, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_ama_home, container, false)
+        val name_tv = rootView.findViewById<TextView>(R.id.welcome_admin_tv)
+
+        val name = arguments?.getString("name")
+
+        if(name != null){
+            name_tv.text = "Olá, $name"
+        }
+
+        return  rootView
     }
 
     companion object {

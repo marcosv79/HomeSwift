@@ -28,6 +28,14 @@ class MainAdminActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        val name = intent.getStringExtra("name")
+        val email = intent.getStringExtra("email")
+
+        val bundle = Bundle()
+        bundle.putString("name", name)
+        bundle.putString("email", email)
+
+        fragment.arguments = bundle
         fragmentTransaction.replace(R.id.frame_layout_ama,fragment)
         fragmentTransaction.commit()
     }

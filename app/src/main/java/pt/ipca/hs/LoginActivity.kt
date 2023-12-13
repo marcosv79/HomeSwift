@@ -101,10 +101,10 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                         }
                         else -> {
+                            if (name != null) {
+                                startMainAdminActivity(email, name)
+                            }
                             Toast.makeText(this@LoginActivity, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@LoginActivity, MainAdminActivity::class.java)
-                            intent.putExtra("name", name)
-                            startActivity(intent)
                         }
                     }
                 } else {
@@ -112,6 +112,13 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun startMainAdminActivity(email: String, name: String){
+        val intent = Intent(this, MainAdminActivity::class.java)
+        intent.putExtra("name", name)
+        intent.putExtra("email", email)
+        startActivity(intent)
     }
 
     fun startMainClientActivity(id: Int, email: String, name: String) {
