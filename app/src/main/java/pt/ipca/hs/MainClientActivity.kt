@@ -46,7 +46,6 @@ class MainClientActivity : AppCompatActivity() {
         bundle.putString("email", email)
         bundle.putInt("idC", idClient)
 
-        // Adicione os IDs ao bundle do fragment
         bundle.putInt("userId", idClient)
 
         fragment.arguments = bundle
