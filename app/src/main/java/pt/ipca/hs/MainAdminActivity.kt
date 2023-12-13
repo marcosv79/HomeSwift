@@ -19,6 +19,7 @@ class MainAdminActivity : AppCompatActivity() {
             when(item.itemId){
                 R.id.home_ama -> replaceFragment(amaHomeFragment())
                 R.id.perfil_ama -> replaceFragment(amaPerfilFragment())
+                R.id.stats_ama -> replaceFragment(amaStatsFragment())
             }
             true
         }

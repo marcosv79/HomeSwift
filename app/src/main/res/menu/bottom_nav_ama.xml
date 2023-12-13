@@ -5,6 +5,12 @@
         android:title="Home"
         android:id="@+id/home_ama"
         android:icon="@drawable/baseline_home_24"/>
+
+    <item
+        android:title="Estatísticas"
+        android:id="@+id/stats_ama"
+        android:icon="@drawable/baseline_query_stats_24" />
+
     <item
         android:title="Perfil"
         android:id="@+id/perfil_ama"
