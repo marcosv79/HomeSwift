@@ -41,4 +41,10 @@
 
         @Query("SELECT evalStar FROM orders WHERE id = :id AND evalStar > 0")
         fun getOrderEvaluation(id: Int): Int?
+
+        @Query("UPDATE orders SET evalComment = :evalComment WHERE id = :orderId")
+        fun updateEvalComment(orderId: Int, evalComment: String)
+
+        @Query("SELECT * FROM orders WHERE evalComment IS NOT NULL and evalComment != ''")
+        fun getReviewsWithComments(): List<Order>
     }

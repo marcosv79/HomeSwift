@@ -21,4 +21,14 @@
         android:layout_marginLeft="55dp"
         android:layout_marginTop="120dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAllReviews"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="200dp"
+        android:layout_below="@id/frameLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"/>
+
+
 </FrameLayout>

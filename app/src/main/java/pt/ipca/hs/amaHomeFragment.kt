@@ -6,21 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [amaHomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class amaHomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var allReviews: List<Order> = emptyList()  // Adicionada a variável para armazenar as avaliações
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,33 +34,61 @@ class amaHomeFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_ama_home, container, false)
         val name_tv = rootView.findViewById<TextView>(R.id.welcome_admin_tv)
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.recyclerViewAllReviews)
 
         val name = arguments?.getString("name")
 
-        if(name != null){
+        if (name != null) {
             name_tv.text = "Olá, $name"
         }
 
-        return  rootView
+        loadAllReviews()
+
+        val adapter = AllReviewsAdapter(allReviews) { order ->
+            onDeleteReview(order)
+        }
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        return rootView
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment amaHomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            amaHomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun loadAllReviews() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val orderDao = MyDatabase.invoke(requireContext()).orderDao()
+            allReviews = orderDao.getReviewsWithComments()
+
+            launch(Dispatchers.Main) {
+                updateUIWithAllReviews(allReviews)
             }
+        }
+    }
+
+    private fun updateUIWithAllReviews(orders: List<Order>) {
+        val reviews = orders.filter { it.evalStar > 0 }
+
+        updateUIWithReviews(reviews)
+    }
+
+    private fun updateUIWithReviews(reviews: List<Order>) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerViewAllReviews)
+
+        val adapter = AllReviewsAdapter(reviews) { order ->
+            onDeleteReview(order)
+        }
+
+        recyclerView?.adapter = adapter
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun onDeleteReview(order: Order) {
+        lifecycleScope.launch(Dispatchers.IO){
+            val orderDao = MyDatabase.invoke(requireContext()).orderDao()
+
+            orderDao.updateEvalComment(order.id, "")
+
+            loadAllReviews()
+        }
     }
 }
