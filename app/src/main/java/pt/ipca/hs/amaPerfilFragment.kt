@@ -164,7 +164,7 @@ class amaPerfilFragment : Fragment() {
 
     private fun loadAdminData(){
         val userEmail = getEmailFromArguments()
-
+//aklsmdakl
         if(!userEmail.isNullOrEmpty()){
             AsyncTask.execute{
                 val userDao = myDatabase.userDao()
