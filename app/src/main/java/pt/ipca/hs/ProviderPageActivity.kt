@@ -128,6 +128,9 @@ class ProviderPageActivity : AppCompatActivity() {
 
         val adapter = ReviewAdapter(reviews)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Define o LinearLayoutManager para orientação horizontal
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = layoutManager
     }
 }
