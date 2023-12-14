@@ -2,6 +2,7 @@ package pt.ipca.hs
 
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -102,7 +103,10 @@ class ProviderPageActivity : AppCompatActivity() {
             val orders = orderDao.getOrdersByProviderId(providerId)
 
             launch(Dispatchers.Main) {
-                Log.d("loadReviewsForProvider", "Number of orders for provider $providerId: ${orders.size}")
+                Log.d(
+                    "loadReviewsForProvider",
+                    "Number of orders for provider $providerId: ${orders.size}"
+                )
 
                 // Print the details of each order for debugging
                 for (order in orders) {
@@ -132,5 +136,19 @@ class ProviderPageActivity : AppCompatActivity() {
         // Define o LinearLayoutManager para orientação horizontal
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
+
+        // Adiciona espaçamento entre os itens diretamente
+        val spacingInPixels =
+            resources.getDimensionPixelSize(R.dimen.spacing)  // Ajuste conforme necessário
+        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                outRect.right = spacingInPixels
+            }
+        })
     }
 }
