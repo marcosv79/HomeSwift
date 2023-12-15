@@ -5,10 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".ampMensagensFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/hs"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunibold"
+        android:text="Mensagens"
+        android:textSize="26dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="120dp"/>
+
     <ListView
+        android:layout_marginTop="200dp"
         android:id="@+id/listViewContacts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_et_bck"/>
 
 </FrameLayout>
