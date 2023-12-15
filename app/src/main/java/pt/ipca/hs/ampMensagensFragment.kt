@@ -19,7 +19,7 @@ class ampMensagensFragment : Fragment() {
 
     private lateinit var listViewMessages: ListView
     private lateinit var myDatabase: MyDatabase
-    private lateinit var messagesList: List<Message>
+    private lateinit var messagesList: List<MensagensGroup>
     private var providerid: Int? = 0
     private lateinit var idclients: ArrayList<Int>
 
@@ -69,49 +69,69 @@ class ampMensagensFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val messageDao = myDatabase.messageDao()
 
-
-            // Modificado para obter apenas as mensagens onde o receiverId é igual ao providerId
-            messagesList = messageDao.getUserMessages(providerid)
-
-            launch(Dispatchers.Main) {
-                val adapter = createMessageAdapter(messagesList)
-                listViewMessages.adapter = adapter
+            try {
+                messagesList = messageDao.getuserMensagens(providerid)
+                launch(Dispatchers.Main) {
+                    val adapter = createMessageAdapter(messagesList)
+                    listViewMessages.adapter = adapter
+                }
+            } catch (e: Exception) {
+                Log.e("Error", "Error getting messages: ${e.message}")
             }
         }
     }
 
-    private suspend fun createMessageAdapter(messagesList: List<Message>): ArrayAdapter<String> {
+    private suspend fun createMessageAdapter(messagesList: List<MensagensGroup>): ArrayAdapter<String> {
         val adapter = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_list_item_1
         )
 
-        // Agrupa mensagens por usuário
-        val messagesByUser =
-            messagesList.groupBy { it.senderId } // Alterado para usar o receiverId
+        // Log para verificar se messagesList não está vazia
+        Log.d("ampMensagensFragment", "Messages List Size: ${messagesList.size}")
 
-        // Adiciona apenas a última mensagem de cada usuário ao adaptador
-        for ((userId, userMessages) in messagesByUser) {
-            var userName = "Nome não disponível"
-            var idclient = 0
-            userMessages.forEach {
-                if (it.senderId.toInt() != providerid) {
-                    idclient = it.senderId.toInt()
-                    userName = getUserName(it.senderId.toInt())
-                    Log.d("amcMensagensFragment", "Added to idProviders: ${it.senderId}")
+        for (message in messagesList) {
+            try {
+                // Separando os IDs de destinatário
+                val receiverIds = message.receiver.split(",").mapNotNull { it.toIntOrNull() }
+
+                // Verificando se você é o destinatário
+                if (receiverIds.contains(providerid)) {
+                    // Adicionando apenas mensagens em que você é o destinatário
+                    val senderIds = message.sender.split(",").mapNotNull { it.toIntOrNull() }
+
+                    // Removendo o seu ID da lista de remetentes
+                    val otherSenderIds = senderIds.filter { it != providerid }
+
+                    if (otherSenderIds.isNotEmpty()) {
+                        idclients.addAll(otherSenderIds)
+
+                        for (userId in otherSenderIds) {
+                            try {
+                                // Obtendo o nome do usuário
+                                val userName = getUserName(userId)
+                                adapter.add("$userName\n${message.messages}")
+                            } catch (e: Exception) {
+                                Log.e("ampMensagensFragment", "Error getting user name: ${e.message}")
+                            }
+                        }
+                    } else {
+                        Log.e("ampMensagensFragment", "No valid sender IDs found")
+                    }
                 }
+            } catch (e: NumberFormatException) {
+                Log.e("ampMensagensFragment", "Error converting sender and receiver IDs: ${message.sender}, ${message.receiver}")
             }
-            idclients.add(idclient)
-            val lastMessage = userMessages.lastOrNull()?.message ?: "Sem mensagens"
-            adapter.add("$userName\n$lastMessage")
         }
 
-        // Adicione logs para verificar as informações dentro da lista de mensagens
-        Log.d("ampMensagensFragment", "Messages List: $messagesList")
-        Log.d("ampMensagensFragment", "Adapter Count: ${adapter.count}")
-        Log.d("ampMensagens", "ID Prov: ${idclients}")
         return adapter
     }
+
+
+
+
+
+
 
 
     private suspend fun getUserName(userId: Int): String {

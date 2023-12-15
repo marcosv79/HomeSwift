@@ -6,11 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.db.williamchart.data.configuration.BarChartConfiguration
-import com.db.williamchart.view.BarChartView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,6 +19,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [amaStatsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class amaStatsFragment : Fragment() {
 
 
