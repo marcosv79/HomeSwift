@@ -80,27 +80,24 @@ class amcMensagensFragment : Fragment() {
             android.R.layout.simple_list_item_1
         )
 
+        idProviders.clear() // Clear the list to start fresh
+
         for (message in messagesList) {
             try {
-                // Separando os IDs de destinatário
                 val receiverIds = message.receiver.split(",").mapNotNull { it.toIntOrNull() }
 
-                // Verificando se você é o destinatário
                 if (receiverIds.contains(idClient)) {
-                    // Adicionando apenas mensagens em que você é o destinatário
                     val senderIds = message.sender.split(",").mapNotNull { it.toIntOrNull() }
-
-                    // Removendo o seu ID da lista de remetentes
                     val otherSenderIds = senderIds.filter { it != idClient }
 
                     if (otherSenderIds.isNotEmpty()) {
-                        idProviders.addAll(otherSenderIds)
-
                         for (userId in otherSenderIds) {
                             try {
-                                // Obtendo o nome do usuário
                                 val userName = getUserName(userId)
-                                adapter.add("$userName\n${message.messages}")
+                                if (userId !in idProviders) {
+                                    idProviders.add(userId)
+                                    adapter.add(userName)
+                                }
                             } catch (e: Exception) {
                                 Log.e("ampMensagensFragment", "Error getting user name: ${e.message}")
                             }

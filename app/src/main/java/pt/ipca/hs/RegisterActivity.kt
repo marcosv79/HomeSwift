@@ -1,8 +1,6 @@
 package pt.ipca.hs
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -11,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -50,7 +49,7 @@ class RegisterActivity : AppCompatActivity() {
             } else if (password_txt.length < 6) {
                 Toast.makeText(this, "Palavra-passe curta", Toast.LENGTH_SHORT).show()
             } else {
-                registerUser(name_txt, email_txt, password_txt, selectedUserType)
+                registerUser(name = name_txt, email = email_txt, password = password_txt, userType = selectedUserType)
             }
         })
     }

@@ -30,12 +30,11 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE receiver_id = :userId OR sender_id = :userId Group by sender_id,receiver_id")
     suspend fun getUserMessages(userId: Int?): List<Message>
 
-    @Query("SELECT ROWID as id, sender_id AS sender, receiver_id AS receiver, message_text AS messages FROM messages WHERE (sender_id = :userId OR receiver_id = :userId) AND ROWID IN (SELECT MAX(ROWID) FROM messages WHERE sender_id = :userId OR receiver_id = :userId GROUP BY CASE WHEN sender_id < receiver_id THEN sender_id ELSE receiver_id END, CASE WHEN sender_id < receiver_id THEN receiver_id ELSE sender_id END);")
+    @Query("SELECT ROWID as id, GROUP_CONCAT(sender_id) AS sender, GROUP_CONCAT(receiver_id) AS receiver,  GROUP_CONCAT(message_text) AS messages FROM messages where sender_id = :userId OR receiver_id = :userId GROUP BY CASE WHEN sender_id < receiver_id THEN sender_id ELSE receiver_id END, CASE WHEN sender_id < receiver_id THEN receiver_id ELSE sender_id END;")
     suspend fun getuserMensagens(userId: Int?): List<MensagensGroup>
 
     @Query("SELECT * FROM messages WHERE id = :id")
     fun findMessageById(id: Long): Message
-
 
     @Query("SELECT * FROM messages WHERE receiver_id = :receiverId")
     suspend fun getMessagesForUser(receiverId: Int): List<Message>

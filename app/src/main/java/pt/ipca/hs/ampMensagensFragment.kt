@@ -38,7 +38,6 @@ class ampMensagensFragment : Fragment() {
 
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
-
                 val clienteid = idclients[position]
 
                 if (clienteid > 0) {
@@ -56,7 +55,6 @@ class ampMensagensFragment : Fragment() {
                         "cliente invalido, contate o admin",
                         Toast.LENGTH_SHORT
                     ).show()
-
                 }
             }
         }
@@ -87,30 +85,24 @@ class ampMensagensFragment : Fragment() {
             android.R.layout.simple_list_item_1
         )
 
-        // Log para verificar se messagesList não está vazia
-        Log.d("ampMensagensFragment", "Messages List Size: ${messagesList.size}")
+        idclients.clear() // Clear the list to start fresh
 
         for (message in messagesList) {
             try {
-                // Separando os IDs de destinatário
                 val receiverIds = message.receiver.split(",").mapNotNull { it.toIntOrNull() }
 
-                // Verificando se você é o destinatário
                 if (receiverIds.contains(providerid)) {
-                    // Adicionando apenas mensagens em que você é o destinatário
                     val senderIds = message.sender.split(",").mapNotNull { it.toIntOrNull() }
-
-                    // Removendo o seu ID da lista de remetentes
                     val otherSenderIds = senderIds.filter { it != providerid }
 
                     if (otherSenderIds.isNotEmpty()) {
-                        idclients.addAll(otherSenderIds)
-
                         for (userId in otherSenderIds) {
                             try {
-                                // Obtendo o nome do usuário
                                 val userName = getUserName(userId)
-                                adapter.add("$userName\n${message.messages}")
+                                if (userId !in idclients) {
+                                    idclients.add(userId)
+                                    adapter.add(userName)
+                                }
                             } catch (e: Exception) {
                                 Log.e("ampMensagensFragment", "Error getting user name: ${e.message}")
                             }
