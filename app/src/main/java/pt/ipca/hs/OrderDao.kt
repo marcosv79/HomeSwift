@@ -47,4 +47,14 @@
 
         @Query("SELECT * FROM orders WHERE evalComment IS NOT NULL and evalComment != ''")
         fun getReviewsWithComments(): List<Order>
+
+        @Query("SELECT idProvider, COUNT(*) as serviceCount FROM orders GROUP BY idProvider ORDER BY serviceCount DESC LIMIT 3")
+        fun getTopProviders(): List<TopProvider>
+
+        @Query("SELECT service, COUNT(*) as serviceCount FROM orders GROUP BY service ORDER BY serviceCount DESC LIMIT 3")
+        fun getTopServices(): List<TopService>
+
+        @Query("SELECT idClient, COUNT(*) as serviceCount FROM orders GROUP BY idClient ORDER BY serviceCount DESC LIMIT 3")
+        fun getTopClients(): List<TopClient>
+
     }
