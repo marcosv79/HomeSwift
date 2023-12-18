@@ -44,7 +44,7 @@
             android:layout_toEndOf="@+id/providerImage"
             android:layout_toRightOf="@+id/providerImage"
             android:text="Nome do Fornecedor"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"/>
