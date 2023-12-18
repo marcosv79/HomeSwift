@@ -4,12 +4,9 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -19,8 +16,12 @@ class PlaceOrderActivity : AppCompatActivity() {
     private lateinit var dateOrder: EditText
     private lateinit var myDatabase: MyDatabase
     private lateinit var typeService: EditText
+    private lateinit var cost: EditText
+    private var baseCost: Double = 0.0
+    private var costUrgent: Double = 0.0
 
     private val calendar = Calendar.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_order)
@@ -40,14 +41,16 @@ class PlaceOrderActivity : AppCompatActivity() {
         typeService = findViewById(R.id.et_typeService_placeOrder)
         val name = findViewById<EditText>(R.id.et_providerName_placeOrder)
         val service = findViewById<EditText>(R.id.et_service_placeOrder)
-        val cost = findViewById<EditText>(R.id.et_cost_placeOrder)
-        val description = findViewById<EditText>(R.id.et_description_placeOrder)
+        cost = findViewById(R.id.et_cost_placeOrder)
         name.setText(providerName)
         service.setText(providerService)
         cost.setText("$providerCost €")
         name.isEnabled = false
         service.isEnabled = false
         cost.isEnabled = false
+
+        baseCost = cost.text.toString().replace(" €", "").toDouble()
+        costUrgent = baseCost * 3
 
         val btnPlaceOrder = findViewById<Button>(R.id.btn_placeOrder)
         btnPlaceOrder.setOnClickListener {
@@ -134,8 +137,10 @@ class PlaceOrderActivity : AppCompatActivity() {
 
         if (calendar.after(today) && calendar.before(nextMonth)) {
             typeService.setText("Urgente")
+            cost.setText(String.format("%.0f €", costUrgent))
         } else {
             typeService.setText("Normal")
+            cost.setText(String.format("%.0f €", baseCost))
         }
     }
 
