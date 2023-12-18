@@ -18,7 +18,7 @@ class PlaceOrderActivity : AppCompatActivity() {
 
     private lateinit var dateOrder: EditText
     private lateinit var myDatabase: MyDatabase
-    private lateinit var spinnerTypeService: Spinner
+    private lateinit var typeService: EditText
 
     private val calendar = Calendar.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         val providerCost = intent.getStringExtra("cost")
         val providerId = intent.getIntExtra("idProvider", 0)
         val userId = intent.getIntExtra("id", 0)
-        spinnerTypeService = findViewById(R.id.spinner_typeService_placeOrder)
+        typeService = findViewById(R.id.et_typeService_placeOrder)
         val name = findViewById<EditText>(R.id.et_providerName_placeOrder)
         val service = findViewById<EditText>(R.id.et_service_placeOrder)
         val cost = findViewById<EditText>(R.id.et_cost_placeOrder)
@@ -62,7 +62,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             val service = findViewById<EditText>(R.id.et_service_placeOrder).text.toString()
             val description = findViewById<EditText>(R.id.et_description_placeOrder).text.toString()
             val date = findViewById<EditText>(R.id.et_date_placeOrder).text.toString()
-            val typeService = spinnerTypeService.selectedItem.toString()
+            val typeService = typeService.text.toString()
             val cost = findViewById<EditText>(R.id.et_cost_placeOrder).text.toString()
             val userId = intent.getIntExtra("id", 0)
             val providerId = intent.getIntExtra("idProvider", 0)
@@ -124,6 +124,21 @@ class PlaceOrderActivity : AppCompatActivity() {
         datePicker.show()
     }
 
+    private fun updateEditTextDate(calendar: Calendar) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        dateOrder.setText(dateFormat.format(calendar.time))
+
+        val today = Calendar.getInstance()
+        val nextMonth = Calendar.getInstance()
+        nextMonth.add(Calendar.MONTH, 1)
+
+        if (calendar.after(today) && calendar.before(nextMonth)) {
+            typeService.setText("Urgente")
+        } else {
+            typeService.setText("Normal")
+        }
+    }
+
     private fun isValidDay(date: Calendar): Boolean {
         return date.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && !isChristmasDay(date) && !isNewYearDay(date)
     }
@@ -134,10 +149,5 @@ class PlaceOrderActivity : AppCompatActivity() {
 
     private fun isNewYearDay(date: Calendar): Boolean {
         return date.get(Calendar.MONTH) == Calendar.JANUARY && date.get(Calendar.DAY_OF_MONTH) == 1
-    }
-
-    private fun updateEditTextDate(calendar: Calendar) {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        dateOrder.setText(dateFormat.format(calendar.time))
     }
 }
