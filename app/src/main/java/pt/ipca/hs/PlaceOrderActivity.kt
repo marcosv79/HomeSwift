@@ -96,6 +96,8 @@ class PlaceOrderActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     Toast.makeText(this, "Pedido efetuado com sucesso", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             } else {
                 runOnUiThread {
