@@ -43,9 +43,9 @@ class ampMensagensFragment : Fragment() {
                 if (clienteid > 0) {
                     lifecycleScope.launch(Dispatchers.Main) {
                         val intent = Intent(requireContext(), Chat_Layout::class.java)
-                        intent.putExtra("providerId", clienteid)
-                        intent.putExtra("userId", providerid)
-                        intent.putExtra("CurrentUserId", providerid)
+                        intent.putExtra("providerId", providerid)  // ID do fornecedor
+                        intent.putExtra("userId", clienteid)       // ID do usuário
+                        intent.putExtra("CurrentUserId", clienteid)  // ID do usuário atual
 
                         startActivity(intent)
                     }

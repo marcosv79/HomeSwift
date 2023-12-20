@@ -42,9 +42,9 @@ class amcMensagensFragment : Fragment() {
                 if(providerId >0){
                     lifecycleScope.launch(Dispatchers.Main) {
                         val intent = Intent(requireContext(), Chat_Layout::class.java)
-                        intent.putExtra("providerId", providerId)
-                        intent.putExtra("userId", idClient)
-                        intent.putExtra("CurrentUserId", idClient)
+                        intent.putExtra("providerId", idClient)      // ID do fornecedor
+                        intent.putExtra("userId", providerId)        // ID do usuário
+                        intent.putExtra("CurrentUserId", providerId)  // ID do usuário atual
 
                         startActivity(intent)
                     }

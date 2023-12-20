@@ -2,7 +2,6 @@ package pt.ipca.hs
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -14,10 +13,10 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Chat_Layout : AppCompatActivity() {
     private lateinit var editTextMessage: EditText
@@ -51,7 +50,6 @@ class Chat_Layout : AppCompatActivity() {
         // Initialize the MessageDao
         messageDao = myDatabase.messageDao()
 
-        val providerName = intent.getStringExtra("providerName") ?: "Nome do Fornecedor"
         // Inicializa as Views
         editTextMessage = findViewById(R.id.editTextMessage)
         sendButton = findViewById(R.id.sendButton)
@@ -59,9 +57,6 @@ class Chat_Layout : AppCompatActivity() {
         scrollView = findViewById(R.id.scrollView)
         backButton = findViewById(R.id.backButton)
         providerNameTextView = findViewById(R.id.providerName)
-
-        // Configura o nome do fornecedor na barra superior
-        providerNameTextView.text = providerName
 
         // Configura o clique do botão de voltar
         backButton.setOnClickListener {
@@ -102,6 +97,7 @@ class Chat_Layout : AppCompatActivity() {
             }
         }
         loadAndDisplayMessages(userId, providerId)
+        updateActionBarTitle(userId)
     }
 
     private fun loadAndDisplayMessages(currentUserId: Int, currentProviderId: Int) {
@@ -118,12 +114,39 @@ class Chat_Layout : AppCompatActivity() {
                     addMessageView(messageView)
                 }
 
+                // Chama updateActionBarTitle após a carga completa das mensagens
+                updateActionBarTitle(userId)
+
                 scrollView.post {
                     scrollView.fullScroll(ScrollView.FOCUS_UP)
                 }
             }
         }
     }
+
+
+    private fun updateActionBarTitle(userId: Int) {
+        lifecycleScope.launch {
+            val user = getUserName(userId)
+            Log.d("Chat_Layout", "getUserName2: User - $user")
+
+            // Certifique-se de que supportActionBar não é nulo
+            supportActionBar?.let {
+                // Configura o nome do usuário na barra de ação
+                it.title = user?.name ?: "Nome do Usuário Padrão"
+            }
+
+            // Atualiza o texto da TextView providerNameTextView
+            providerNameTextView.text = user?.name ?: "Nome do Fornecedor"
+        }
+    }
+
+
+
+
+
+
+
 
     private fun formatMessage(message: Message): View {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -156,7 +179,20 @@ class Chat_Layout : AppCompatActivity() {
         return layout
     }
 
+    private suspend fun getUserName(userId: Int): User? {
+        return withContext(Dispatchers.IO) {
+            val userDao = myDatabase.userDao()
 
+            try {
+                val user = userDao.getUserById(userId)
+                Log.d("Chat_Layout", "getUserName: User - $user")
+                return@withContext user
+            } catch (e: Exception) {
+                Log.e("Chat_Layout", "Error fetching user: ${e.message}")
+                return@withContext null
+            }
+        }
+    }
 
 
     private fun addMessageView(view: View) {
