@@ -1,13 +1,20 @@
 package pt.ipca.hs
 
+import android.content.Context
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +22,7 @@ import kotlinx.coroutines.launch
 class Chat_Layout : AppCompatActivity() {
     private lateinit var editTextMessage: EditText
     private lateinit var sendButton: ImageButton
-    private lateinit var messageTextView: TextView
+    private lateinit var messageTextView: LinearLayout
     private lateinit var scrollView: ScrollView
     private lateinit var backButton: ImageButton
     private lateinit var providerNameTextView: TextView
@@ -29,7 +36,6 @@ class Chat_Layout : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_layout)
-
 
         // Recupera o ID do fornecedor e o nome da Intent
         // Recuperar valores do Intent
@@ -45,12 +51,11 @@ class Chat_Layout : AppCompatActivity() {
         // Initialize the MessageDao
         messageDao = myDatabase.messageDao()
 
-
         val providerName = intent.getStringExtra("providerName") ?: "Nome do Fornecedor"
         // Inicializa as Views
         editTextMessage = findViewById(R.id.editTextMessage)
         sendButton = findViewById(R.id.sendButton)
-        messageTextView = findViewById(R.id.messageTextView)
+        messageTextView = findViewById(R.id.chatLayout)
         scrollView = findViewById(R.id.scrollView)
         backButton = findViewById(R.id.backButton)
         providerNameTextView = findViewById(R.id.providerName)
@@ -67,25 +72,30 @@ class Chat_Layout : AppCompatActivity() {
             val messageText = editTextMessage.text.toString()
 
             if (messageText.isNotBlank()) {
-                // Adiciona a nova mensagem no início do texto
-                messageTextView.text =
-                    "Você para o fornecedor $providerId: $messageText\n" + messageTextView.text
+                // Formata a nova mensagem
+                val messageView = formatMessage(
+                    Message(
+                        senderId = userId.toString(),
+                        receiverId = providerId.toString(),
+                        message = messageText
+                    )
+                )
+
+                // Adiciona a nova mensagem formatada ao texto existente
+                addMessageView(messageView)
+
                 // Limpa o texto após o envio
                 editTextMessage.text.clear()
 
-                // Rola automaticamente para a última mensagem
-                scrollView.post {
-                    scrollView.fullScroll(ScrollView.FOCUS_UP)
-                }
-
-                // Save the message to the database
-                val message = Message(
-                    senderId = userId.toString(),
-                    receiverId = providerId.toString(),
-                    message = messageText
-                )
+                // Salva a mensagem no banco de dados
                 lifecycleScope.launch(Dispatchers.IO) {
-                    messageDao.insertMessage(message)
+                    messageDao.insertMessage(
+                        Message(
+                            senderId = userId.toString(),
+                            receiverId = providerId.toString(),
+                            message = messageText
+                        )
+                    )
                 }
             } else {
                 showToast("Digite uma mensagem antes de enviar.")
@@ -96,32 +106,64 @@ class Chat_Layout : AppCompatActivity() {
 
     private fun loadAndDisplayMessages(currentUserId: Int, currentProviderId: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
-            // Consulta no banco de dados para obter as mensagens relevantes
             val messages = if (currentUserId < currentProviderId) {
                 messageDao.getMessages(currentUserId.toString(), currentProviderId.toString())
             } else {
                 messageDao.getMessages(currentProviderId.toString(), currentUserId.toString())
-            }.toList() // Ordena as mensagens por timestamp
+            }.toList()
 
-            // Atualiza a UI no thread principal
             launch(Dispatchers.Main) {
-                // Limpa o texto atual da ScrollView
-                messageTextView.text = ""
-
-
-                // Adiciona as mensagens recuperadas à ScrollView
                 for (message in messages) {
-                    val formattedMessage =
-                        "Usuario ${message.senderId} para o fornecedor ${message.receiverId}: ${message.message}\n"
-                    messageTextView.append(formattedMessage)
+                    val messageView = formatMessage(message)
+                    addMessageView(messageView)
                 }
 
-                // Rola automaticamente para a última mensagem
                 scrollView.post {
                     scrollView.fullScroll(ScrollView.FOCUS_UP)
                 }
             }
         }
+    }
+
+    private fun formatMessage(message: Message): View {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout: View
+
+        if (message.senderId == userId.toString()) {
+            // Mensagem enviada pelo usuário
+            layout = inflater.inflate(R.layout.sent_message_layout, null)
+            val sentMessageTextView = layout.findViewById<TextView>(R.id.sentMessageTextView)
+            sentMessageTextView.text = message.message
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.gravity = Gravity.END
+            layout.layoutParams = params
+        } else {
+            // Mensagem recebida do fornecedor
+            layout = inflater.inflate(R.layout.received_message_layout, null)
+            val receivedMessageTextView = layout.findViewById<TextView>(R.id.receivedMessageTextView)
+            receivedMessageTextView.text = message.message
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.gravity = Gravity.START
+            layout.layoutParams = params
+        }
+
+        return layout
+    }
+
+
+
+
+    private fun addMessageView(view: View) {
+        messageTextView.addView(view)
+
+        // Adiciona uma quebra de linha para separar as mensagens
+        messageTextView.addView(View(this))
     }
 
     private fun showToast(message: String) {

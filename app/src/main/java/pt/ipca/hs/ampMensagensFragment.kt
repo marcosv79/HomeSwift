@@ -84,37 +84,36 @@ class ampMensagensFragment : Fragment() {
             requireContext(),
             android.R.layout.simple_list_item_1
         )
+        var provider = providerid.toString()
 
-        idclients.clear() // Clear the list to start fresh
 
-        for (message in messagesList) {
-            try {
-                val receiverIds = message.receiver.split(",").mapNotNull { it.toIntOrNull() }
+        for(message in messagesList){
+            var senders = message.sender.split(",")
+            var messages = message.messages.split(",")
+            var clientName = ""
+            var clientRow = ""
 
-                if (receiverIds.contains(providerid)) {
-                    val senderIds = message.sender.split(",").mapNotNull { it.toIntOrNull() }
-                    val otherSenderIds = senderIds.filter { it != providerid }
+            for(sender in senders)
+            {
+                if(sender != provider)
+                {
+                    idclients.add(sender.toInt())
+                    clientName = getUserName(sender.toInt())
+                    clientRow = clientName + "\n" + messages.last()
+                    adapter.add(clientRow)
+                    break
 
-                    if (otherSenderIds.isNotEmpty()) {
-                        for (userId in otherSenderIds) {
-                            try {
-                                val userName = getUserName(userId)
-                                if (userId !in idclients) {
-                                    idclients.add(userId)
-                                    adapter.add(userName)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("ampMensagensFragment", "Error getting user name: ${e.message}")
-                            }
-                        }
-                    } else {
-                        Log.e("ampMensagensFragment", "No valid sender IDs found")
-                    }
                 }
-            } catch (e: NumberFormatException) {
-                Log.e("ampMensagensFragment", "Error converting sender and receiver IDs: ${message.sender}, ${message.receiver}")
+
             }
+
+
+
+
+
         }
+
+
 
         return adapter
     }
