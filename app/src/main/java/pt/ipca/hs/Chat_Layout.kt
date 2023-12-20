@@ -106,7 +106,7 @@ class Chat_Layout : AppCompatActivity() {
                     addMessageView(messageView)
                 }
 
-                updateActionBarTitle(userId)
+                updateActionBarTitle(providerId)
 
                 scrollView.post {
                     scrollView.fullScroll(ScrollView.FOCUS_UP)
