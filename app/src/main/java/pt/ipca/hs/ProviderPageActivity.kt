@@ -127,28 +127,35 @@ class ProviderPageActivity : AppCompatActivity() {
         updateUIWithReviews(reviews)
     }
 
-    private fun updateUIWithReviews(reviews: List<Order>) {
+    private fun updateUIWithReviews(orders: List<Order>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewReviews)
 
-        val adapter = ReviewAdapter(reviews)
-        recyclerView.adapter = adapter
+        lifecycleScope.launch(Dispatchers.IO) {
+            val userDao = MyDatabase.invoke(applicationContext).userDao()
+            val users = userDao.getAll()
 
-        // Define o LinearLayoutManager para orientação horizontal
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.layoutManager = layoutManager
+            launch(Dispatchers.Main) {
+                val adapter = ReviewAdapter(orders, users)
+                recyclerView.adapter = adapter
 
-        // Adiciona espaçamento entre os itens diretamente
-        val spacingInPixels =
-            resources.getDimensionPixelSize(R.dimen.spacing)  // Ajuste conforme necessário
-        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                outRect.right = spacingInPixels
+                // Define o LinearLayoutManager para orientação horizontal
+                val layoutManager = LinearLayoutManager(this@ProviderPageActivity, LinearLayoutManager.HORIZONTAL, false)
+                recyclerView.layoutManager = layoutManager
+
+                // Adiciona espaçamento entre os itens diretamente
+                val spacingInPixels =
+                    resources.getDimensionPixelSize(R.dimen.spacing)  // Ajuste conforme necessário
+                recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+                    override fun getItemOffsets(
+                        outRect: Rect,
+                        view: View,
+                        parent: RecyclerView,
+                        state: RecyclerView.State
+                    ) {
+                        outRect.right = spacingInPixels
+                    }
+                })
             }
-        })
+        }
     }
 }

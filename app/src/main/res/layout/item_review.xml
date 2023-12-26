@@ -8,6 +8,16 @@
     android:layout_marginBottom="10dp"
     android:background="@drawable/rounded_et_bck">
 
+    <TextView
+        android:id="@+id/clientNameTextView"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:text="nome"
+        android:textSize="16sp" />
+
     <RatingBar
         android:id="@+id/ratingBar"
         android:fontFamily="@font/nunibold"
@@ -15,8 +25,9 @@
         android:layout_height="wrap_content"
         android:scaleX="0.7"
         android:scaleY="0.7"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:isIndicator="true"
+        android:layout_marginLeft="-40dp"
         app:tint="@color/hs" />
 
     <TextView
@@ -25,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ratingBar"
-        android:layout_marginTop="20dp"
-        android:text="" />
+        android:layout_marginTop="10dp"
+        android:text="avaliacao" />
 
 </RelativeLayout>
