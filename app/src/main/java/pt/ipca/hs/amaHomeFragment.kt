@@ -18,7 +18,7 @@ private const val ARG_PARAM2 = "param2"
 class amaHomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private var allReviews: List<Order> = emptyList()  // Adicionada a variável para armazenar as avaliações
+    private var allReviews: List<Order> = emptyList()  // Variável para armazenar as avaliações
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,8 +90,6 @@ class amaHomeFragment : Fragment() {
             recyclerView?.adapter = adapter
             recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         }
-
-
     }
 
     private fun onDeleteReview(order: Order) {

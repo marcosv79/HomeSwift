@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:padding="16dp"
+    android:padding="5dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/rounded_et_bck">
 
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
-        android:text="nome"
+        android:text=""
         android:textSize="16sp" />
 
     <RatingBar
@@ -23,6 +23,7 @@
         android:fontFamily="@font/nunibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:scaleX="0.7"
         android:scaleY="0.7"
         android:layout_marginTop="20dp"
@@ -36,7 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ratingBar"
-        android:layout_marginTop="10dp"
-        android:text="avaliacao" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="aaaaaa" />
 
 </RelativeLayout>

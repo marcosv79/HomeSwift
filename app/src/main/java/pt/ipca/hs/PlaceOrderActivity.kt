@@ -4,8 +4,10 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -17,6 +19,7 @@ class PlaceOrderActivity : AppCompatActivity() {
     private lateinit var myDatabase: MyDatabase
     private lateinit var typeService: EditText
     private lateinit var cost: EditText
+    private lateinit var spinnerHour : Spinner
     private var baseCost: Double = 0.0
     private var costUrgent: Double = 0.0
 
@@ -42,6 +45,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         val name = findViewById<EditText>(R.id.et_providerName_placeOrder)
         val service = findViewById<EditText>(R.id.et_service_placeOrder)
         cost = findViewById(R.id.et_cost_placeOrder)
+        spinnerHour = findViewById(R.id.spinner_hour_placeOrder)
         name.setText(providerName)
         service.setText(providerService)
         cost.setText("$providerCost €")
@@ -50,7 +54,13 @@ class PlaceOrderActivity : AppCompatActivity() {
         cost.isEnabled = false
 
         baseCost = cost.text.toString().replace(" €", "").toDouble()
-        costUrgent = baseCost * 3
+        costUrgent = baseCost * 2
+
+        val hours = arrayOf("9h00", "11h00", "14h00", "16h00")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, hours)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerHour.adapter = adapter
 
         val btnPlaceOrder = findViewById<Button>(R.id.btn_placeOrder)
         btnPlaceOrder.setOnClickListener {
@@ -69,6 +79,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             val cost = findViewById<EditText>(R.id.et_cost_placeOrder).text.toString()
             val userId = intent.getIntExtra("id", 0)
             val providerId = intent.getIntExtra("idProvider", 0)
+            val hour = spinnerHour.selectedItem.toString()
 
             if (date.isNullOrEmpty()) {
                 runOnUiThread {
@@ -77,7 +88,7 @@ class PlaceOrderActivity : AppCompatActivity() {
                 return@Thread
             }
 
-            val existingOrder = orderDao.findOrderByProviderAndDate(providerId, date)
+            val existingOrder = orderDao.findOrderByProviderDateHour(providerId, date, hour)
             if (existingOrder == null) {
                 val order = Order(
                     idClient = userId,
@@ -89,7 +100,8 @@ class PlaceOrderActivity : AppCompatActivity() {
                     status = "Ativo",
                     cost = cost,
                     evalStar = 0,
-                    evalComment = ""
+                    evalComment = "",
+                    hour = hour
                 )
 
                 orderDao.insertOrder(order)

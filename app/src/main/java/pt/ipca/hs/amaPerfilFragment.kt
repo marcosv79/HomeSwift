@@ -16,16 +16,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [amaPerfilFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class amaPerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -55,7 +48,6 @@ class amaPerfilFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_ama_perfil, container, false)
 
         auth = FirebaseAuth.getInstance()

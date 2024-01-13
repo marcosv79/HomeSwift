@@ -68,7 +68,6 @@ class ProviderPageActivity : AppCompatActivity() {
     }
 
     private fun updateUI(selectedProvider: User?) {
-        val providerImageView = findViewById<ImageView>(R.id.providerImageView)
         val providerNameTextView = findViewById<TextView>(R.id.providerNameTextView)
         val providerLocationTextView = findViewById<TextView>(R.id.providerLocationTextView)
         val providerServiceTextView = findViewById<TextView>(R.id.providerServiceTextView)
@@ -80,13 +79,11 @@ class ProviderPageActivity : AppCompatActivity() {
             val providerService = selectedProvider.service
             val providerCost = selectedProvider.cost
 
-            providerImageView.setImageResource(R.drawable.baseline_person_24)
             providerNameTextView.text = providerName
             providerLocationTextView.text = providerAddress
             providerServiceTextView.text = providerService
             providerCostTextView.text = "$providerCost €"
         } else {
-            providerImageView.setImageResource(R.drawable.baseline_person_24)
             providerNameTextView.text = "Fornecedor não encontrado"
             providerLocationTextView.text = ""
             providerServiceTextView.text = ""
@@ -138,13 +135,11 @@ class ProviderPageActivity : AppCompatActivity() {
                 val adapter = ReviewAdapter(orders, users)
                 recyclerView.adapter = adapter
 
-                // Define o LinearLayoutManager para orientação horizontal
-                val layoutManager = LinearLayoutManager(this@ProviderPageActivity, LinearLayoutManager.HORIZONTAL, false)
+                val layoutManager = LinearLayoutManager(this@ProviderPageActivity, LinearLayoutManager.VERTICAL, false)
                 recyclerView.layoutManager = layoutManager
 
-                // Adiciona espaçamento entre os itens diretamente
                 val spacingInPixels =
-                    resources.getDimensionPixelSize(R.dimen.spacing)  // Ajuste conforme necessário
+                    resources.getDimensionPixelSize(R.dimen.spacing)
                 recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
                     override fun getItemOffsets(
                         outRect: Rect,
@@ -152,7 +147,7 @@ class ProviderPageActivity : AppCompatActivity() {
                         parent: RecyclerView,
                         state: RecyclerView.State
                     ) {
-                        outRect.right = spacingInPixels
+                        outRect.bottom = spacingInPixels
                     }
                 })
             }

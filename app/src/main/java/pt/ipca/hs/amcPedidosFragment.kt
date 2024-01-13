@@ -107,8 +107,18 @@ class amcPedidosFragment : Fragment() {
         } else {
             noOrdersMessage?.visibility = View.GONE
             recyclerView?.visibility = View.VISIBLE
+
+            // Ordenar a lista de pedidos pelo formato de data
+            val sortedOrders = orders.sortedByDescending { order ->
+                val parts = order.date.split("/")
+                val year = parts[2].toInt()
+                val month = parts[1].toInt()
+                val day = parts[0].toInt()
+                year * 10000 + month * 100 + day
+            }
+
             recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-            recyclerView?.adapter = OrderAdapter(orders, users,
+            recyclerView?.adapter = OrderAdapter(sortedOrders, users,
                 { orderId ->
                     lifecycleScope.launch(Dispatchers.IO) {
                         val orderDao = myDatabase.orderDao()
@@ -160,6 +170,7 @@ class amcPedidosFragment : Fragment() {
                     "Fornecedor: ${user.name}\n" +
                             "Morada: ${user.address} - ${user.location}\n" +
                             "Data: ${order.date}\n" +
+                            "Hora: ${order.hour}\n" +
                             "Custo: ${order.cost}\n" +
                             "Tipo de serviço: ${order.typeService}\n" +
                             "Estado: ${order.status}\n" +

@@ -18,8 +18,8 @@
         @Query("SELECT * FROM orders WHERE id = :id")
         fun findById(id: Int): Order
 
-        @Query("SELECT * FROM orders WHERE idProvider = :providerId AND date = :orderDate")
-        fun findOrderByProviderAndDate(providerId: Int, orderDate: String): Order?
+        @Query("SELECT * FROM orders WHERE idProvider = :providerId AND date = :orderDate AND hour = :hourDate")
+        fun findOrderByProviderDateHour(providerId: Int, orderDate: String, hourDate: String): Order?
 
         @Insert
         fun insertOrder(vararg order: Order)

@@ -12,6 +12,7 @@ data class Order(
     @ColumnInfo(name = "service") val service: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "hour") val hour: String,
     @ColumnInfo(name = "typeService") val typeService: String,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "cost") val cost: String,

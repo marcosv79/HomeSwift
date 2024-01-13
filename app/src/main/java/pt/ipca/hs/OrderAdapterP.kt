@@ -29,7 +29,7 @@ class OrderAdapterP(private val orders: List<Order>,
 
         holder.textClientName.text = "${client?.name}"
         holder.textAddress.text = "${client?.address}"
-        holder.textDate.text = "${order.date}"
+        holder.textDate.text = "${order.date} - ${order.hour}"
         //holder.textCost.text = "${order.cost}"
         holder.textTypeService.text = "${order.typeService}"
         //holder.textStatus.text = "${order.status}"
