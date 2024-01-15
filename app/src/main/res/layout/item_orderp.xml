@@ -1,0 +1,76 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:padding="16dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/rounded_et_bck">
+
+    <TextView
+        android:id="@+id/textClientName"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textAddress"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textDate"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textTypeService"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/textSeeMore"
+        android:fontFamily="@font/nunibold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textClientName"
+        android:layout_below="@id/textTypeService"
+        android:src="@drawable/baseline_add_circle_24"
+        android:layout_alignParentEnd="true"
+        android:text="Ver mais"
+        app:tint="@color/hs" />
+
+    <Button
+        android:id="@+id/btnFinishOrder"
+        android:layout_width="97dp"
+        android:layout_height="35dp"
+        android:text="Concluir"
+        android:layout_marginEnd="8dp"
+        android:layout_below="@id/textTypeService"
+        android:background="@drawable/rounded_et_bck"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/btnCancelOrder"
+        android:layout_width="97dp"
+        android:layout_height="35dp"
+        android:text="Cancelar"
+        android:layout_marginEnd="8dp"
+        android:layout_toEndOf="@id/btnFinishOrder"
+        android:layout_below="@id/textTypeService"
+        android:background="@drawable/rounded_et_bck"
+        android:textSize="12sp"/>
+
+</RelativeLayout>

@@ -1,0 +1,109 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/hsImageView"
+        android:layout_width="400dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/hs" />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/rounded_et_bck"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Top Clientes"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunibold" />
+
+            <TextView
+                android:id="@+id/topClientsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunibold"
+                android:text="" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Top Fornecedores"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunibold" />
+
+            <TextView
+                android:id="@+id/topProvidersTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunibold"
+                android:text="" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Top Serviços"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunibold" />
+
+            <TextView
+                android:id="@+id/topServicesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunibold"
+                android:text="" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
