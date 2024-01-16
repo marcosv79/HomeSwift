@@ -30,7 +30,9 @@ class OrderAdapterP(private val orders: List<Order>,
         holder.textClientName.text = "${client?.name}"
         holder.textAddress.text = "${client?.address}"
         holder.textDate.text = "${order.date} - ${order.hour}"
+        //holder.textCost.text = "${order.cost}"
         holder.textTypeService.text = "${order.typeService}"
+        //holder.textStatus.text = "${order.status}"
 
         holder.btnCancelOrder.visibility = if (order.status == "Concluído") View.GONE else View.VISIBLE
 
@@ -58,7 +60,9 @@ class OrderAdapterP(private val orders: List<Order>,
     class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textAddress: TextView = itemView.findViewById(R.id.textAddress)
         val textDate: TextView = itemView.findViewById(R.id.textDate)
+        //val textCost: TextView = itemView.findViewById(R.id.textCost)
         val textTypeService: TextView = itemView.findViewById(R.id.textTypeService)
+        //val textStatus: TextView = itemView.findViewById(R.id.textStatus)
         val textClientName: TextView = itemView.findViewById(R.id.textClientName)
         val seeMoreTv: ImageView = itemView.findViewById(R.id.textSeeMore)
         val btnFinishOrder: Button = itemView.findViewById(R.id.btnFinishOrder)

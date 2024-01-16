@@ -48,6 +48,7 @@ class  MainProviderActivity : AppCompatActivity() {
         bundle.putInt("id", id)
         bundle.putInt("currentUserId", currentUserId)
 
+        // Adicione os IDs ao bundle do fragment
         bundle.putInt("providerId", id)
         bundle.putInt("userId", currentUserId)
 

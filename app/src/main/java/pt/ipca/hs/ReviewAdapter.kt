@@ -18,6 +18,7 @@ class ReviewAdapter(private val orders: List<Order>, private val users: List<Use
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val order = orders[position]
 
+        // Encontrar o nome do cliente correspondente ao ID do cliente no pedido
         val clientName = users.find { it.id == order.idClient }?.name ?: "Nome não encontrado"
 
         holder.clientNameTextView.text = clientName
