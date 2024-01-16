@@ -38,13 +38,12 @@ class amcMensagensFragment : Fragment() {
         listViewMessages.setOnItemClickListener { _, _, position, _ ->
             if (::messagesList.isInitialized && position < messagesList.size) {
                 val providerId = idProviders[position]
-                Log.d("amcMensagens", "ID Prov: $providerId")
                 if(providerId >0){
                     lifecycleScope.launch(Dispatchers.Main) {
                         val intent = Intent(requireContext(), Chat_Layout::class.java)
-                        intent.putExtra("providerId", providerId)      // ID do fornecedor
-                        intent.putExtra("userId", idClient)        // ID do usuário
-                        intent.putExtra("CurrentUserId", idClient)  // ID do usuário atual
+                        intent.putExtra("providerId", providerId)
+                        intent.putExtra("userId", idClient)
+                        intent.putExtra("CurrentUserId", idClient)
 
                         startActivity(intent)
                     }
@@ -79,9 +78,7 @@ class amcMensagensFragment : Fragment() {
             requireContext(),
             android.R.layout.simple_list_item_1
         )
-
         var client = idClient.toString()
-
 
         for(message in messagesList){
             var receivers = message.receiver.split(",")
@@ -100,11 +97,8 @@ class amcMensagensFragment : Fragment() {
                     break
 
                 }
-
             }
-
         }
-
         return adapter
     }
 
@@ -116,14 +110,11 @@ class amcMensagensFragment : Fragment() {
                 val user = userDao.getUserById(userId)
 
                 if (user != null) {
-                    Log.d("amcMensagensFragment", "User found - Name: ${user.name}")
                     return@withContext user.name ?: "Nome não disponível"
                 } else {
-                    Log.d("amcMensagensFragment", "User not found for ID: $userId")
                     return@withContext "Nome não disponível"
                 }
             } catch (e: Exception) {
-                Log.e("amcMensagensFragment", "Error fetching user: ${e.message}")
                 return@withContext "Erro ao obter o nome do usuário"
             }
         }

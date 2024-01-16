@@ -68,11 +68,9 @@ class amcPedidosFragment : Fragment() {
             }
         }
 
-
         idClient?.let { clientId ->
             loadOrdersForClient(clientId, "Todos")
         }
-
         return rootView
     }
 
@@ -89,7 +87,6 @@ class amcPedidosFragment : Fragment() {
                     } else {
                         orderDao.getOrdersByClientAndStatus(clientId, statusFilter)
                     }
-
                 launch(Dispatchers.Main) {
                     updateUIWithOrders(orders, users, clientId)
                 }

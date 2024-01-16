@@ -67,7 +67,6 @@ class amaStatsFragment : Fragment() {
                 topClientsTextView?.text = topClientsString.toString()
             }
         }
-
         return rootView
     }
 

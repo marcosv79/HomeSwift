@@ -143,6 +143,17 @@
         android:layout_below="@id/frameLayout"
         android:layout_marginTop="-85dp"/>
 
+    <TextView
+        android:id="@+id/noEvalMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Neste momento não existem avaliações"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunibold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewReviews"
         android:layout_width="300dp"

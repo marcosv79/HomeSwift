@@ -147,10 +147,10 @@ class PlaceOrderActivity : AppCompatActivity() {
         dateOrder.setText(dateFormat.format(calendar.time))
 
         val today = Calendar.getInstance()
-        val nextMonth = Calendar.getInstance()
-        nextMonth.add(Calendar.MONTH, 1)
+        val nextTwoWeeks = Calendar.getInstance()
+        nextTwoWeeks.add(Calendar.DAY_OF_MONTH, 14)
 
-        if (calendar.after(today) && calendar.before(nextMonth)) {
+        if (calendar.after(today) && calendar.before(nextTwoWeeks)) {
             typeService.setText("Urgente")
             cost.setText(String.format("%.0f €", costUrgent))
         } else {

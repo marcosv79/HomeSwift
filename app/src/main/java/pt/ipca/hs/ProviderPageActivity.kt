@@ -30,15 +30,11 @@ class ProviderPageActivity : AppCompatActivity() {
         val providerId = intent.getIntExtra("id", 0)
         val currentUserId = intent.getIntExtra("currentUserId", -1)
 
-        Log.d("ProviderPageActivity", "Provider ID: $providerId, User ID: $userId")
-
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
 
             selectedProvider = userDao.findById(providerId)
 
-
-            // Fetch reviews for the specific provider
             loadReviewsForProvider(providerId)
 
             launch(Dispatchers.Main) {
@@ -105,7 +101,6 @@ class ProviderPageActivity : AppCompatActivity() {
                     "Number of orders for provider $providerId: ${orders.size}"
                 )
 
-                // Print the details of each order for debugging
                 for (order in orders) {
                     Log.d("loadReviewsForProvider", "Order details: $order")
                 }
@@ -116,40 +111,48 @@ class ProviderPageActivity : AppCompatActivity() {
     }
 
     private fun updateUIWithReviews(orders: List<Order>, users: List<User>, providerId: Int) {
-        // Process orders to extract evalComment and evalStar
         val reviews = orders.filter { it.idProvider == providerId && it.evalStar > 0 }
 
-
-        // Update UI with reviews
         updateUIWithReviews(reviews)
     }
 
     private fun updateUIWithReviews(orders: List<Order>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewReviews)
+        val textViewNoReviews = findViewById<TextView>(R.id.noEvalMessage)
 
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
             val users = userDao.getAll()
 
             launch(Dispatchers.Main) {
-                val adapter = ReviewAdapter(orders, users)
-                recyclerView.adapter = adapter
+                if (orders.isNotEmpty()) {
+                    textViewNoReviews.visibility = View.GONE
 
-                val layoutManager = LinearLayoutManager(this@ProviderPageActivity, LinearLayoutManager.VERTICAL, false)
-                recyclerView.layoutManager = layoutManager
+                    val adapter = ReviewAdapter(orders, users)
+                    recyclerView.adapter = adapter
 
-                val spacingInPixels =
-                    resources.getDimensionPixelSize(R.dimen.spacing)
-                recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-                    override fun getItemOffsets(
-                        outRect: Rect,
-                        view: View,
-                        parent: RecyclerView,
-                        state: RecyclerView.State
-                    ) {
-                        outRect.bottom = spacingInPixels
-                    }
-                })
+                    val layoutManager = LinearLayoutManager(
+                        this@ProviderPageActivity,
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
+                    recyclerView.layoutManager = layoutManager
+
+                    val spacingInPixels =
+                        resources.getDimensionPixelSize(R.dimen.spacing)
+                    recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+                        override fun getItemOffsets(
+                            outRect: Rect,
+                            view: View,
+                            parent: RecyclerView,
+                            state: RecyclerView.State
+                        ) {
+                            outRect.bottom = spacingInPixels
+                        }
+                    })
+                } else {
+                    textViewNoReviews.visibility = View.VISIBLE
+                }
             }
         }
     }

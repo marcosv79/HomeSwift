@@ -43,10 +43,9 @@ class ampMensagensFragment : Fragment() {
                 if (clienteid > 0) {
                     lifecycleScope.launch(Dispatchers.Main) {
                         val intent = Intent(requireContext(), Chat_Layout::class.java)
-                        intent.putExtra("providerId", clienteid)  // ID do fornecedor
-                        intent.putExtra("userId", providerid)       // ID do usuário
-                        intent.putExtra("CurrentUserId", providerid)  // ID do usuário atual
-
+                        intent.putExtra("providerId", clienteid)
+                        intent.putExtra("userId", providerid)
+                        intent.putExtra("CurrentUserId", providerid)
                         startActivity(intent)
                     }
                 } else {
@@ -104,26 +103,11 @@ class ampMensagensFragment : Fragment() {
                     break
 
                 }
-
             }
 
-
-
-
-
         }
-
-
-
         return adapter
     }
-
-
-
-
-
-
-
 
     private suspend fun getUserName(userId: Int): String {
         return withContext(Dispatchers.IO) {
@@ -133,14 +117,11 @@ class ampMensagensFragment : Fragment() {
                 val user = userDao.getUserById(userId)
 
                 if (user != null) {
-                    Log.d("ampMensagensFragment", "User found - Name: ${user.name}")
                     return@withContext user.name ?: "Nome não disponível"
                 } else {
-                    Log.d("ampMensagensFragment", "User not found for ID: $userId")
                     return@withContext "Nome não disponível"
                 }
             } catch (e: Exception) {
-                Log.e("ampMensagensFragment", "Error fetching user: ${e.message}")
                 return@withContext "Erro ao obter o nome do usuário"
             }
         }

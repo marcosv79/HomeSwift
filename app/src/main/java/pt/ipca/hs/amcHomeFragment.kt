@@ -70,8 +70,6 @@ class amcHomeFragment : Fragment() {
             R.array.service,
             android.R.layout.simple_spinner_item
         )
-        //servicesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        //serviceSpinner.adapter = servicesAdapter
         serviceAutoComplete.setAdapter(servicesAdapter)
 
         usersAdapter = ArrayAdapter(
@@ -79,25 +77,7 @@ class amcHomeFragment : Fragment() {
             android.R.layout.simple_list_item_1
         )
         listView.adapter = usersAdapter
-/*
-        serviceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedService = parent?.getItemAtPosition(position).toString()
-                getSelectedProvider(selectedService)
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                getProviders()
-            }
-        }
-*/
-
-        //TESTE
         serviceAutoComplete.setOnItemClickListener { _, _, _, _ ->
             val selectedService = serviceAutoComplete.text.toString()
             getSelectedProvider(selectedService)
@@ -109,12 +89,10 @@ class amcHomeFragment : Fragment() {
             }
         }
 
-        // Configura o InputType para evitar que a tecla Enter seja interpretada
         serviceAutoComplete.inputType = InputType.TYPE_NULL
 
         serviceAutoComplete.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                // Impede que a ação padrão seja executada
                 return@setOnEditorActionListener true
             }
             false
@@ -162,7 +140,6 @@ class amcHomeFragment : Fragment() {
         }
     }
 
-
     private fun getProviders() {
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = myDatabase.userDao()
@@ -179,7 +156,6 @@ class amcHomeFragment : Fragment() {
             }
         }
     }
-
         companion object {
             @JvmStatic
             fun newInstance(idClient: Int) =
