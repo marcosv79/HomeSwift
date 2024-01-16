@@ -15,6 +15,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import pt.ipca.hs.Controllers.LoginActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,12 +33,14 @@ class ampPerfilFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var myDatabase: MyDatabase
+
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var moradaEditText: EditText
     private lateinit var passwordEditText: EditText
-    private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
+
+    private lateinit var btnGuardar: Button
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -60,16 +63,17 @@ class ampPerfilFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(requireContext())
+
         nameEditText = view.findViewById(R.id.et_name_amp_perfil)
+        nameEditText.isEnabled = false
         emailEditText = view.findViewById(R.id.et_email_amp_perfil)
+        emailEditText.isEnabled = false
         passwordEditText = view.findViewById(R.id.et_password_amp_perfil)
         moradaEditText = view.findViewById(R.id.et_address_amp_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amp_perfil)
+
         btnGuardar = view.findViewById(R.id.btn_save_amp_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_provider)
-
-        nameEditText.isEnabled = false
-        emailEditText.isEnabled = false
 
         loadProviderData()
 
@@ -175,8 +179,6 @@ class ampPerfilFragment : Fragment() {
                         val userName = it.name
                         val userAddress = it.address
                         val userLocation = it.location
-                        val userService = it.service
-                        val userCost = it.cost
 
                         nameEditText.setText(userName)
                         emailEditText.setText(userEmail)

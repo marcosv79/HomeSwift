@@ -1,6 +1,5 @@
-package pt.ipca.hs
+package pt.ipca.hs.Controllers
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import pt.ipca.hs.R
 
 const val channelId = "notification_channel"
 const val channelName = "pt.ipca.hs"

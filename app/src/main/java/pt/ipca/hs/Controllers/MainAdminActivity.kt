@@ -1,9 +1,12 @@
-package pt.ipca.hs
+package pt.ipca.hs.Controllers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import pt.ipca.hs.R
+import pt.ipca.hs.amaHomeFragment
+import pt.ipca.hs.amaPerfilFragment
+import pt.ipca.hs.amaStatsFragment
 import pt.ipca.hs.databinding.ActivityMainAdminBinding
 
 class MainAdminActivity : AppCompatActivity() {

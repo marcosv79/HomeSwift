@@ -15,6 +15,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import pt.ipca.hs.Controllers.LoginActivity
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -29,8 +30,9 @@ class amaPerfilFragment : Fragment() {
     private lateinit var emailEditText: EditText
     private lateinit var moradaEditText: EditText
     private lateinit var passwordEditText: EditText
-    private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
+
+    private lateinit var btnGuardar: Button
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -53,16 +55,17 @@ class amaPerfilFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(requireContext())
+
         nameEditText = view.findViewById(R.id.et_name_ama_perfil)
+        nameEditText.isEnabled = false
         emailEditText = view.findViewById(R.id.et_email_ama_perfil)
+        emailEditText.isEnabled = false
         passwordEditText = view.findViewById(R.id.et_password_ama_perfil)
         moradaEditText = view.findViewById(R.id.et_address_ama_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_ama_perfil)
+
         btnGuardar = view.findViewById(R.id.btn_save_ama_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_admin)
-
-        nameEditText.isEnabled = false
-        emailEditText.isEnabled = false
 
         loadAdminData()
 

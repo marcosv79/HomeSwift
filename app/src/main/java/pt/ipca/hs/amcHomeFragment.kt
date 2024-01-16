@@ -3,7 +3,6 @@ package pt.ipca.hs
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pt.ipca.hs.Controllers.ProviderPageActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +32,6 @@ class amcHomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    //private lateinit var serviceSpinner: Spinner
     private lateinit var serviceAutoComplete: AutoCompleteTextView
     private lateinit var listView: ListView
     private lateinit var usersAdapter: ArrayAdapter<String>
@@ -60,7 +59,6 @@ class amcHomeFragment : Fragment() {
             name_tv.text = "Olá, $name"
         }
 
-        //serviceSpinner = rootView.findViewById(R.id.spinner_service_amc_home)
         serviceAutoComplete = rootView.findViewById(R.id.autoCompleteTextView_service_amc_home)
         listView = rootView.findViewById(R.id.lv_service_amc_home)
         myDatabase = MyDatabase.invoke(requireContext())
@@ -121,7 +119,6 @@ class amcHomeFragment : Fragment() {
         intent.putExtra("idC", idClient)
         startActivity(intent)
     }
-
 
     private fun getSelectedProvider(selectedService: String) {
         lifecycleScope.launch(Dispatchers.IO) {

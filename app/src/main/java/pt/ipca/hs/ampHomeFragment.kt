@@ -35,6 +35,7 @@ class ampHomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var myDatabase: MyDatabase
+
     private lateinit var emailEditText: EditText
     private lateinit var spinnerService: Spinner
     private lateinit var costEditText: EditText
@@ -58,12 +59,12 @@ class ampHomeFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(requireContext())
+
         emailEditText = rootView.findViewById(R.id.et_email_amp_home)
+        emailEditText.isVisible = false
         spinnerService = rootView.findViewById(R.id.spinner_service_amp_home)
         costEditText = rootView.findViewById(R.id.et_cost_amp_home)
         btnGuardar = rootView.findViewById(R.id.btn_save_amp_home)
-
-        emailEditText.isVisible = false
 
         loadProviderData()
 
@@ -76,7 +77,6 @@ class ampHomeFragment : Fragment() {
         if (name != null) {
             name_tv.text = "Olá, $name"
         }
-
         return rootView
     }
 

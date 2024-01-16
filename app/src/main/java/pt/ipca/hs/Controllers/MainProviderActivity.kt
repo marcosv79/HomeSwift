@@ -1,9 +1,14 @@
-package pt.ipca.hs
+package pt.ipca.hs.Controllers
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import pt.ipca.hs.R
+import pt.ipca.hs.ampHomeFragment
+import pt.ipca.hs.ampMensagensFragment
+import pt.ipca.hs.ampPedidosFragment
+import pt.ipca.hs.ampPerfilFragment
 import pt.ipca.hs.databinding.ActivityMainProviderBinding
 
 class  MainProviderActivity : AppCompatActivity() {
@@ -48,7 +53,6 @@ class  MainProviderActivity : AppCompatActivity() {
         bundle.putInt("id", id)
         bundle.putInt("currentUserId", currentUserId)
 
-        // Adicione os IDs ao bundle do fragment
         bundle.putInt("providerId", id)
         bundle.putInt("userId", currentUserId)
 

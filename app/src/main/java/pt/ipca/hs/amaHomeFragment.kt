@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pt.ipca.hs.Controllers.AllReviewsAdapter
+import pt.ipca.hs.Models.Order
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

@@ -1,11 +1,10 @@
-package pt.ipca.hs
+package pt.ipca.hs.Models
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import pt.ipca.hs.MensagensGroup
 
 @Dao
 interface MessageDao {
