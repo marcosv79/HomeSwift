@@ -37,26 +37,26 @@ class PlaceOrderActivity : AppCompatActivity() {
         }
 
         val providerName = intent.getStringExtra("name")
-        val providerService = intent.getStringExtra("service")
-        val providerCost = intent.getStringExtra("cost")
-        val providerId = intent.getIntExtra("idProvider", 0)
-        val userId = intent.getIntExtra("id", 0)
-        typeService = findViewById(R.id.et_typeService_placeOrder)
         val name = findViewById<EditText>(R.id.et_providerName_placeOrder)
-        val service = findViewById<EditText>(R.id.et_service_placeOrder)
-        cost = findViewById(R.id.et_cost_placeOrder)
-        spinnerHour = findViewById(R.id.spinner_hour_placeOrder)
-        name.setText(providerName)
-        service.setText(providerService)
-        cost.setText("$providerCost €")
         name.isEnabled = false
-        service.isEnabled = false
-        cost.isEnabled = false
 
+        val providerService = intent.getStringExtra("service")
+        val service = findViewById<EditText>(R.id.et_service_placeOrder)
+        service.setText(providerService)
+        service.isEnabled = false
+
+        val providerCost = intent.getStringExtra("cost")
+        cost = findViewById(R.id.et_cost_placeOrder)
+        cost.setText("$providerCost €")
+        cost.isEnabled = false
         baseCost = cost.text.toString().replace(" €", "").toDouble()
         costUrgent = baseCost * 2
 
+        typeService = findViewById(R.id.et_typeService_placeOrder)
+
+        spinnerHour = findViewById(R.id.spinner_hour_placeOrder)
         val hours = arrayOf("9h00", "11h00", "14h00", "16h00")
+
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, hours)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -147,10 +147,10 @@ class PlaceOrderActivity : AppCompatActivity() {
         dateOrder.setText(dateFormat.format(calendar.time))
 
         val today = Calendar.getInstance()
-        val nextMonth = Calendar.getInstance()
-        nextMonth.add(Calendar.MONTH, 1)
+        val twoWeeksLater = Calendar.getInstance()
+        twoWeeksLater.add(Calendar.DAY_OF_MONTH, 14)
 
-        if (calendar.after(today) && calendar.before(nextMonth)) {
+        if (calendar.after(today) && calendar.before(twoWeeksLater)) {
             typeService.setText("Urgente")
             cost.setText(String.format("%.0f €", costUrgent))
         } else {

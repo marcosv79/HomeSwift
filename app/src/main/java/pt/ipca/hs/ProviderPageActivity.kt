@@ -30,15 +30,11 @@ class ProviderPageActivity : AppCompatActivity() {
         val providerId = intent.getIntExtra("id", 0)
         val currentUserId = intent.getIntExtra("currentUserId", -1)
 
-        Log.d("ProviderPageActivity", "Provider ID: $providerId, User ID: $userId")
-
         lifecycleScope.launch(Dispatchers.IO) {
             val userDao = MyDatabase.invoke(applicationContext).userDao()
 
             selectedProvider = userDao.findById(providerId)
 
-
-            // Fetch reviews for the specific provider
             loadReviewsForProvider(providerId)
 
             launch(Dispatchers.Main) {
@@ -105,7 +101,6 @@ class ProviderPageActivity : AppCompatActivity() {
                     "Number of orders for provider $providerId: ${orders.size}"
                 )
 
-                // Print the details of each order for debugging
                 for (order in orders) {
                     Log.d("loadReviewsForProvider", "Order details: $order")
                 }
@@ -116,11 +111,7 @@ class ProviderPageActivity : AppCompatActivity() {
     }
 
     private fun updateUIWithReviews(orders: List<Order>, users: List<User>, providerId: Int) {
-        // Process orders to extract evalComment and evalStar
         val reviews = orders.filter { it.idProvider == providerId && it.evalStar > 0 }
-
-
-        // Update UI with reviews
         updateUIWithReviews(reviews)
     }
 

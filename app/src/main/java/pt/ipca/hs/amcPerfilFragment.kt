@@ -30,8 +30,9 @@ class amcPerfilFragment : Fragment() {
     private lateinit var emailEditText: EditText
     private lateinit var moradaEditText: EditText
     private lateinit var passwordEditText: EditText
-    private lateinit var btnGuardar: Button
     private lateinit var spinnerLocation: Spinner
+
+    private lateinit var btnGuardar: Button
     private lateinit var btnLogout: Button
 
     private var param1: String? = null
@@ -50,22 +51,22 @@ class amcPerfilFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_amc_perfil, container, false)
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(requireContext())
+
         nameEditText = view.findViewById(R.id.et_name_amc_perfil)
+        nameEditText.isEnabled = false
         emailEditText = view.findViewById(R.id.et_email_amc_perfil)
+        emailEditText.isEnabled = false
         passwordEditText = view.findViewById(R.id.et_password_amc_perfil)
         moradaEditText = view.findViewById(R.id.et_address_amc_perfil)
         spinnerLocation = view.findViewById(R.id.spinner_location_amc_perfil)
+
         btnGuardar = view.findViewById(R.id.btn_save_amc_perfil)
         btnLogout = view.findViewById(R.id.btn_logout_client)
-
-        nameEditText.isEnabled = false
-        emailEditText.isEnabled = false
 
         loadUserData()
 

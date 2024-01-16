@@ -20,8 +20,6 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var userDao: UserDao
     private lateinit var myDatabase: MyDatabase
     private lateinit var sharedPreferences: SharedPreferences
@@ -34,8 +32,6 @@ class LoginActivity : AppCompatActivity() {
         val password_et_la = findViewById<EditText>(R.id.password_et_la)
         val btn_login_la =  findViewById<Button>(R.id.btn_login_la)
 
-        //auth = FirebaseAuth.getInstance()
-        //firestore = FirebaseFirestore.getInstance()
         myDatabase = MyDatabase.invoke(applicationContext)
         userDao = myDatabase.userDao()
 

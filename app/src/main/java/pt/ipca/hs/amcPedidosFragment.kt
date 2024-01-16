@@ -68,11 +68,9 @@ class amcPedidosFragment : Fragment() {
             }
         }
 
-
         idClient?.let { clientId ->
             loadOrdersForClient(clientId, "Todos")
         }
-
         return rootView
     }
 

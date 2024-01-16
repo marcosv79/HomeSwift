@@ -74,7 +74,7 @@ class Chat_Layout : AppCompatActivity() {
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN)
                 }
 
-                // Salva a mensagem no banco de dados
+                // Guarda a mensagem na base de dados
                 lifecycleScope.launch(Dispatchers.IO) {
                     messageDao.insertMessage(
                         Message(
@@ -114,7 +114,6 @@ class Chat_Layout : AppCompatActivity() {
             }
         }
     }
-
 
     private fun updateActionBarTitle(userId: Int) {
         lifecycleScope.launch {

@@ -24,14 +24,12 @@ class contatos_amc : AppCompatActivity() {
         listViewContacts = findViewById(R.id.listViewNovaPagina)
         myDatabase = MyDatabase.invoke(this)
 
-        // Configurar a ListView e seus dados aqui
         getProviders()
         val backButton: ImageButton = findViewById(R.id.backButton)
 
         backButton.setOnClickListener {
-            finish() // Isso fecha a atividade atual, levando de volta à atividade anterior
+            finish()
         }
-
     }
 
     private fun getProviders() {

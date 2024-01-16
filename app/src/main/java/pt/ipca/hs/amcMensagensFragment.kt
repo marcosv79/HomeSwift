@@ -42,14 +42,14 @@ class amcMensagensFragment : Fragment() {
                 if(providerId >0){
                     lifecycleScope.launch(Dispatchers.Main) {
                         val intent = Intent(requireContext(), Chat_Layout::class.java)
-                        intent.putExtra("providerId", providerId)      // ID do fornecedor
-                        intent.putExtra("userId", idClient)        // ID do usuário
-                        intent.putExtra("CurrentUserId", idClient)  // ID do usuário atual
+                        intent.putExtra("providerId", providerId)       // ID do fornecedor
+                        intent.putExtra("userId", idClient)             // ID do cliente
+                        intent.putExtra("CurrentUserId", idClient)      // ID do utilizador atual
 
                         startActivity(intent)
                     }
                 } else {
-                    Toast.makeText(context, "Provider invalido, contate o admin", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -100,11 +100,8 @@ class amcMensagensFragment : Fragment() {
                     break
 
                 }
-
             }
-
         }
-
         return adapter
     }
 
@@ -116,15 +113,12 @@ class amcMensagensFragment : Fragment() {
                 val user = userDao.getUserById(userId)
 
                 if (user != null) {
-                    Log.d("amcMensagensFragment", "User found - Name: ${user.name}")
                     return@withContext user.name ?: "Nome não disponível"
                 } else {
-                    Log.d("amcMensagensFragment", "User not found for ID: $userId")
                     return@withContext "Nome não disponível"
                 }
             } catch (e: Exception) {
-                Log.e("amcMensagensFragment", "Error fetching user: ${e.message}")
-                return@withContext "Erro ao obter o nome do usuário"
+                return@withContext "Erro ao obter o nome do utilizador"
             }
         }
     }
