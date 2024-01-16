@@ -1,4 +1,4 @@
-package pt.ipca.hs
+package pt.ipca.hs.Controllers
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import pt.ipca.hs.Models.Order
+import pt.ipca.hs.R
 
 class AllReviewsAdapter(private val reviews: List<Order>, private val onDeleteClickListener: (Order) -> Unit) : RecyclerView.Adapter<AllReviewsAdapter.ReviewViewHolder>() {
 

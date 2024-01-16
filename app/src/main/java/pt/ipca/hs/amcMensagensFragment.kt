@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pt.ipca.hs.Models.MensagensGroup
+import pt.ipca.hs.Views.Chat_Layout
 
 class amcMensagensFragment : Fragment() {
 

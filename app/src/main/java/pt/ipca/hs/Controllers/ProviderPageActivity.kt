@@ -1,4 +1,4 @@
-package pt.ipca.hs
+package pt.ipca.hs.Controllers
 
 
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pt.ipca.hs.Models.Order
+import pt.ipca.hs.MyDatabase
+import pt.ipca.hs.R
+import pt.ipca.hs.Views.ReviewAdapter
+import pt.ipca.hs.Models.User
+import pt.ipca.hs.Views.Chat_Layout
+import pt.ipca.hs.Views.PlaceOrderActivity
 
 class ProviderPageActivity : AppCompatActivity() {
 

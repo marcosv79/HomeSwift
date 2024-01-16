@@ -1,4 +1,4 @@
-package pt.ipca.hs
+package pt.ipca.hs.Models
 
 data class MensagensGroup(
     val id: Long,

@@ -1,4 +1,4 @@
-package pt.ipca.hs
+package pt.ipca.hs.Views
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -9,6 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import pt.ipca.hs.Controllers.LoginActivity
+import pt.ipca.hs.Models.Order
+import pt.ipca.hs.MyDatabase
+import pt.ipca.hs.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

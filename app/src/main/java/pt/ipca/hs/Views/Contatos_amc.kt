@@ -1,6 +1,5 @@
-package pt.ipca.hs
+package pt.ipca.hs.Views
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -10,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pt.ipca.hs.MyDatabase
+import pt.ipca.hs.R
 
 class contatos_amc : AppCompatActivity() {
 

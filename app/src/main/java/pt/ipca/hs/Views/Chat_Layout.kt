@@ -1,8 +1,7 @@
-package pt.ipca.hs
+package pt.ipca.hs.Views
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pt.ipca.hs.Models.Message
+import pt.ipca.hs.Models.MessageDao
+import pt.ipca.hs.MyDatabase
+import pt.ipca.hs.R
+import pt.ipca.hs.Models.User
 
 class Chat_Layout : AppCompatActivity() {
     private lateinit var editTextMessage: EditText
