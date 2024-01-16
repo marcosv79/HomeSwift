@@ -1,13 +1,10 @@
-package pt.ipca.hs.Controllers
+package pt.ipca.hs
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import pt.ipca.hs.R
-import pt.ipca.hs.amcHomeFragment
-import pt.ipca.hs.amcMensagensFragment
-import pt.ipca.hs.amcPedidosFragment
-import pt.ipca.hs.amcPerfilFragment
 import pt.ipca.hs.databinding.ActivityMainClientBinding
 
 class MainClientActivity : AppCompatActivity() {

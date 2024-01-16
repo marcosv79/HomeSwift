@@ -1,4 +1,4 @@
-package pt.ipca.hs.Models
+package pt.ipca.hs
 
 import androidx.room.Dao
 import androidx.room.Delete

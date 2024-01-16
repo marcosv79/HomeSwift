@@ -1,4 +1,4 @@
-package pt.ipca.hs.Models
+package pt.ipca.hs
 
 import androidx.room.ColumnInfo
 

@@ -1,5 +1,6 @@
 package pt.ipca.hs
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pt.ipca.hs.Models.OrderDao
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

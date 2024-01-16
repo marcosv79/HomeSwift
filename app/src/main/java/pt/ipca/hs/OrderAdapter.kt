@@ -1,4 +1,4 @@
-package pt.ipca.hs.Views
+package pt.ipca.hs
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import pt.ipca.hs.Models.Order
-import pt.ipca.hs.R
-import pt.ipca.hs.Models.User
 
 class OrderAdapter(private val orders: List<Order>,
                    private val users: List<User>,

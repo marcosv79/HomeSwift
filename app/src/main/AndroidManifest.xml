@@ -29,25 +29,25 @@
             android:name=".MessageAdapter"
             android:exported="false" />
         <activity
-            android:name=".Views.PlaceOrderActivity"
+            android:name=".PlaceOrderActivity"
             android:exported="false" />
         <activity
-            android:name=".Views.Chat_Layout"
+            android:name=".Chat_Layout"
             android:exported="false" />
         <activity
-            android:name=".Controllers.ProviderPageActivity"
+            android:name=".ProviderPageActivity"
             android:exported="false" />
         <activity
-            android:name=".Views.contatos_amc"
+            android:name=".contatos_amc"
             android:exported="false" />
         <activity
-            android:name=".Controllers.MainAdminActivity"
+            android:name=".MainAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".Controllers.MainProviderActivity"
+            android:name=".MainProviderActivity"
             android:exported="false" />
         <activity
-            android:name=".Controllers.MainClientActivity"
+            android:name=".MainClientActivity"
             android:exported="false" />
         <activity
             android:name=".StartActivity"
@@ -56,10 +56,10 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Controllers.RegisterActivity"
+            android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".Controllers.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,7 +69,7 @@
         </activity>
 
         <service
-            android:name=".Controllers.MyFirebaseMessagingService"
+            android:name="MyFirebaseMessagingService"
             android:exported="false"
             tools:ignore="Instantiatable">
             <intent-filter>

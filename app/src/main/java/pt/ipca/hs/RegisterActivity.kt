@@ -1,4 +1,4 @@
-package pt.ipca.hs.Controllers
+package pt.ipca.hs
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,9 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import pt.ipca.hs.MyDatabase
-import pt.ipca.hs.R
-import pt.ipca.hs.Models.User
 
 class RegisterActivity : AppCompatActivity() {
 

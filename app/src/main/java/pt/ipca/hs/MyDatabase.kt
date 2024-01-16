@@ -6,12 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import pt.ipca.hs.Models.Message
-import pt.ipca.hs.Models.MessageDao
-import pt.ipca.hs.Models.Order
-import pt.ipca.hs.Models.OrderDao
-import pt.ipca.hs.Models.User
-import pt.ipca.hs.Models.UserDao
 
 @Database(entities = [User::class, Order::class, Message::class], version = 5)
 abstract class MyDatabase : RoomDatabase() {

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.Chat_Layout">
+    tools:context=".Chat_Layout">
 
     <!-- Adiciona a barra superior com botão de voltar, imagem e nome do fornecedor -->
     <RelativeLayout
